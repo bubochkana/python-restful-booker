@@ -1,0 +1,7 @@
+# Environments
+.venv
+venv/
+
+# Editors
+.idea/
+*/.idea/

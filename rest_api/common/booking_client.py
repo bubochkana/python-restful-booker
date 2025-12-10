@@ -28,6 +28,18 @@ class BookingClient:
     def create_booking(self, body):
         return requests.post(self.BOOKING_URL, json=body)
 
+    def update_booking(self, booking_id, body, headers=None):
+        token = AuthClient().get_token()
+        default_headers = {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "Cookie": f"token={token}"
+        }
+
+        final_headers = default_headers if headers is None else headers
+
+        return requests.put(self.BOOKING_URL + booking_id, json=body, headers=final_headers)
+
     def delete_booking(self, booking_id, headers=None):
         token = AuthClient().get_token()
         default_headers = {

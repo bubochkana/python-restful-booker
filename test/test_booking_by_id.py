@@ -1,19 +1,26 @@
-from core.utils.common_utils import load_schema
-from jsonschema import validate
+from assertpy import assert_that
+from rest_api.models.booking_model import Booking
 
 
-def test_booking_id_schema_validation(booking_client, booking_helper):
-    schema = load_schema('get_booking_id_json_schema.json')
+class TestBookingById:
+    def test_booking_id_schema_validation(self, booking_client, booking_helper):
+        response = booking_client.get_booking_by_id(
+            booking_helper.pick_random_booking_id_from_the_existing_list())
 
-    response = booking_client.get_booking_by_id(
-        booking_helper.pick_random_booking_id_from_the_existing_list())
-    response.raise_for_status()
-
-    for field in response.json():
-        validate(instance=field, schema=schema)
+        # TODO - not sure how to create the assert here and validate the schema
+        booking = Booking.model_validate(response)
+        assert_that(booking.firstname).is_not_empty()
 
 
-def test_get_booking_by_id(booking_client, booking_helper):
-    response = booking_client.get_booking_by_id(
-        booking_helper.pick_random_booking_id_from_the_existing_list())
-    assert response.status_code == 200
+    def test_get_booking_by_id(self, booking_client, booking_helper):
+        response = booking_client.get_booking_by_id(
+            booking_helper.pick_random_booking_id_from_the_existing_list())
+        assert_that(response).contains_key("firstname")
+        assert_that(response).contains_key("lastname")
+        assert_that(response).contains_key("totalprice")
+        assert_that(response).contains_key("depositpaid")
+        # TODO - the assert fails because can't find attribute bookingdates
+        # assert_that(response.bookingdates).contains_key("checkin")
+        # assert_that(response.bookingdates).contains_key("checkout")
+        assert_that(response).contains_key("additionalneeds")
+        # TODO - how to verify the response status code

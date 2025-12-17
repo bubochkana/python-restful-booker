@@ -1,5 +1,6 @@
 from assertpy import assert_that
-from rest_api.models.booking_model import Booking
+import requests
+from src.models.booking_model import Booking
 
 
 class TestBookingById:
@@ -11,16 +12,15 @@ class TestBookingById:
         booking = Booking.model_validate(response)
         assert_that(booking.firstname).is_not_empty()
 
-
     def test_get_booking_by_id(self, booking_client, booking_helper):
         response = booking_client.get_booking_by_id(
             booking_helper.pick_random_booking_id_from_the_existing_list())
-        assert_that(response).contains_key("firstname")
-        assert_that(response).contains_key("lastname")
-        assert_that(response).contains_key("totalprice")
-        assert_that(response).contains_key("depositpaid")
+        assert_that(response.json()).contains_key("firstname")
+        assert_that(response.json()).contains_key("lastname")
+        assert_that(response.json()).contains_key("totalprice")
+        assert_that(response.json()).contains_key("depositpaid")
         # TODO - the assert fails because can't find attribute bookingdates
-        # assert_that(response.bookingdates).contains_key("checkin")
-        # assert_that(response.bookingdates).contains_key("checkout")
-        assert_that(response).contains_key("additionalneeds")
-        # TODO - how to verify the response status code
+        assert_that(response.json().bookingdates).contains_key("checkin")
+        assert_that(response.json().bookingdates).contains_key("checkout")
+        assert_that(response.json()).contains_key("additionalneeds")
+        assert_that(response.status_code).is_equal_to(requests.codes.ok)

@@ -1,6 +1,6 @@
 class TestDeleteBooking:
     def test_delete_booking(self, booking_client, booking_helper):
-        booking_id = booking_client.create_booking(booking_helper.BODY)['bookingid']
+        booking_id = booking_client.create_booking(booking_helper.BODY).json()['bookingid']
         response = booking_client.delete_booking(booking_id)
         assert response.status_code == 201
 
@@ -16,7 +16,7 @@ class TestDeleteBooking:
         assert response.status_code == 403
 
     def test_delete_the_same_booking_twice(self, booking_client, booking_helper):
-        booking_id = booking_client.create_booking(booking_helper.BODY)['bookingid']
+        booking_id = booking_client.create_booking(booking_helper.BODY).json()['bookingid']
 
         response = booking_client.delete_booking(booking_id)
         assert response.status_code == 201

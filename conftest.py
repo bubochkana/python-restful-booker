@@ -1,6 +1,6 @@
 import pytest
-from rest_api.common.booking_client import BookingClient
-from rest_api.helpers.booking_helper import BookingHelper
+from src.common.booking_client import BookingClient
+from src.helpers.booking_helper import BookingHelper
 
 
 BODY = {

@@ -16,14 +16,6 @@ def get_restful_booker_api_url():
     return config['restful-booker']['url']
 
 
-def get_booking_ids_api_url():
-    return get_restful_booker_api_url() + config['resources']['booking']
-
-
-def get_auth_url():
-    return get_restful_booker_api_url() + config['resources']['auth']
-
-
 def get_username():
     return config['authentication']['username']
 

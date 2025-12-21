@@ -1,21 +1,20 @@
 import requests
-from src.utils.booker_config_parser import get_username, get_password
-from src.utils.booker_config_parser import get_restful_booker_api_url
+from src.utils.booker_config_parser import ConfigurationParser
 
 
 class AuthClient:
 
     def __init__(self):
-        self.host = get_restful_booker_api_url()
+        self.host = ConfigurationParser().get_restful_booker_api_url()
 
-    USERNAME = get_username()
-    PASSWORD = get_password()
+    username = ConfigurationParser().get_username()
+    password = ConfigurationParser().get_password()
 
     def get_token(self):
         headers = {"Content-Type": "application/json"}
         body = {
-            "username": self.USERNAME,
-            "password": self.PASSWORD
+            "username": self.username,
+            "password": self.password
         }
         response = requests.post(f"{self.host}/auth", json=body, headers=headers)
         return response.json()['token']

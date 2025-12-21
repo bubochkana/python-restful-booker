@@ -1,14 +1,14 @@
 from typing import Optional
 
 import requests
-from src.utils.booker_config_parser import get_restful_booker_api_url
+from src.utils.booker_config_parser import ConfigurationParser
 from src.common.auth_client import AuthClient
 from src.models.booking_model import Booking
 
 
 class BookingClient:
     def __init__(self):
-        self.host = get_restful_booker_api_url()
+        self.host = ConfigurationParser().get_restful_booker_api_url()
 
     def get_booking_ids(self,
                         firstname: Optional[str] = None,

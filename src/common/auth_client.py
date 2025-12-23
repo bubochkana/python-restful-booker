@@ -1,14 +1,14 @@
 import requests
-from src.utils.booker_config_parser import ConfigurationParser
+from src.configs.settings_management_model import Settings
 
 
 class AuthClient:
 
     def __init__(self):
-        self.host = ConfigurationParser().get_restful_booker_api_url()
+        self.host = Settings().url
 
-    username = ConfigurationParser().get_username()
-    password = ConfigurationParser().get_password()
+    username = Settings().username
+    password = Settings().password
 
     def get_token(self):
         headers = {"Content-Type": "application/json"}

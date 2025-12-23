@@ -21,5 +21,5 @@ class TestBookings:
         assert_that(response.json()).is_not_empty()
 
     def test_filter_bookings_by_checkin_and_checkout_dates(self, booking_client):
-        response = booking_client.get_booking_ids(checkin="2022-03-13", checkout="2025-05-21")
+        response = booking_client.get_booking_ids(checkin="2018-01-01", checkout="2019-01-01")
         assert_that(response.json()).is_not_empty()

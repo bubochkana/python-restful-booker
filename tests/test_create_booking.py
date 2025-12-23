@@ -5,7 +5,7 @@ from assertpy import assert_that
 class TestCreateBooking:
     def test_create_booking(self, booking_client, booking_helper):
 
-        response = booking_client.create_booking(booking_helper.BODY)
+        response = booking_client.create_booking(booking_helper.build_random_booking())
 
         # TODO - not sure how to make an assert here using the model
         assert_that(response.status_code).is_equal_to(requests.codes.ok)

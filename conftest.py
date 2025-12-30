@@ -1,6 +1,8 @@
 import pytest
-from src.common.booking_client import BookingClient
+
+from src.clients.booking.booking_client import BookingClient
 from src.helpers.booking_helper import BookingHelper
+
 
 @pytest.fixture
 def booking_client():

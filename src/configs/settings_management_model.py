@@ -1,10 +1,14 @@
 from pydantic_settings import BaseSettings
+import yaml
 
 
 class Settings(BaseSettings):
-    url: str = 'https://restful-booker.herokuapp.com/'
-    username: str = 'admin'
-    password: str = 'password123'
+    url: str
+    username: str
+    password: str
 
-    # TODO - how to handle the settings specific to the QA/DEV environment here?
-    # TODO - is is safe to store the creds in the model?
+    @classmethod
+    def read_yaml(cls, path):
+        with open(path, "r") as settings_file:
+            content = yaml.safe_load(settings_file)
+        return cls(**content)

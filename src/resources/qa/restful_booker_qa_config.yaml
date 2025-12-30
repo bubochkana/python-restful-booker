@@ -1,1 +1,4 @@
 # The configuration specific to the QA environment
+url: "https://restful-booker.herokuapp.com"
+username:  "admin"
+password: "password123"

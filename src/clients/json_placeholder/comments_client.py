@@ -9,5 +9,8 @@ class CommentsClient:
         settings = Settings.read_yaml(get_qa_env_dir().joinpath("qa_config.yaml"))
         self.host = settings.json_placeholder_url
 
-    def get_all_comments_by_pots_id(self, post_id):
+    def get_all_comments_for_the_post_id(self, post_id):
         return requests.get(f"{self.host}/posts/{post_id}/comments")
+
+    def ger_all_comments_by_post_id(self, post_id):
+        return requests.get(f"{self.host}/comments?postId={post_id}")

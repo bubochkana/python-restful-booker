@@ -99,5 +99,3 @@ class BookingClient:
                 return [f"Value mismatch: expected '{expected_results}', got '{actual_results}'."]
             else:
                 return []
-
-

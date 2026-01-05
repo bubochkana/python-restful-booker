@@ -15,11 +15,12 @@ def booking_client():
 def booking_helper():
     return BookingHelper()
 
+
 @pytest.fixture
 def posts_client():
     return PostsClient()
 
+
 @pytest.fixture
 def comments_client():
     return CommentsClient()
-

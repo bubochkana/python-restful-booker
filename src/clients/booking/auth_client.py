@@ -6,8 +6,8 @@ from src.common.common_paths import get_qa_env_dir
 
 class AuthClient:
     def __init__(self):
-        settings = Settings.read_yaml(get_qa_env_dir().joinpath("restful_booker_qa_config.yaml"))
-        self.host = settings.url
+        settings = Settings.read_yaml(get_qa_env_dir().joinpath("qa_config.yaml"))
+        self.host = settings.restful_booker_url
         self.username = settings.username
         self.password = settings.password
 

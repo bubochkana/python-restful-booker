@@ -2,8 +2,8 @@ from datetime import datetime
 
 from pydantic import BaseModel, Field
 
-from src.clients.booking.models.booking_id_model import BookingId
-from src.clients.booking.models.booking_model import Booking
+from src.models.bookings.booking_id_model import BookingId
+from src.models.bookings.booking_model import Booking
 
 
 class BookingDates(BaseModel):

@@ -1,6 +1,6 @@
 from assertpy import assert_that
 import requests
-from src.clients.booking.models.booking_model import Booking
+from src.models.bookings.booking_model import Booking
 
 
 class TestBookingById:

@@ -1,7 +1,7 @@
 import random
 from src.clients.booking.booking_client import BookingClient
-from src.clients.booking.models.booking_id_model import BookingId
-from src.clients.booking.models.booking_model import Booking, BookingDates
+from src.models.bookings.booking_id_model import BookingId
+from src.models.bookings.booking_model import Booking, BookingDates
 from faker import Faker
 
 
@@ -20,6 +20,6 @@ class BookingHelper:
                        additionalNeeds=faker.name())
 
     def pick_random_booking_id_from_the_existing_list(self) -> str:
-        booking_ids_list = BookingClient().get_booking_ids()
+        booking_ids_list = BookingClient().get_all_bookings()
         my_obj_list: list[BookingId] = [BookingId(**dict_item) for dict_item in booking_ids_list.json()]
         return str(random.choice(my_obj_list).bookingid)

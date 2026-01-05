@@ -3,9 +3,10 @@ import yaml
 
 
 class Settings(BaseSettings):
-    url: str
+    restful_booker_url: str
     username: str
     password: str
+    json_placeholder_url: str
 
     @classmethod
     def read_yaml(cls, path):

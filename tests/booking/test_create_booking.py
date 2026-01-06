@@ -1,5 +1,6 @@
 import requests
 from assertpy import assert_that
+from src.helpers.compare_models import CompareModel
 
 
 class TestCreateBooking:
@@ -10,8 +11,8 @@ class TestCreateBooking:
 
         assert_that(actual_result.status_code).is_equal_to(requests.codes.ok)
 
-        comparison_results = booking_client.compare_values(body.model_dump(),
-                                                           actual_result.json()['booking'])
+        comparison_results = (CompareModel()
+                              .compare_values(body.model_dump(),actual_result.json()['booking']))
         assert_that(comparison_results,
                     f"Following differences found: {comparison_results}").is_empty()
 

@@ -4,9 +4,9 @@ from src.helpers.compare_models import CompareModel
 
 
 class TestCreateBooking:
-    def test_create_booking(self, booking_client, booking_helper):
+    def test_create_booking(self, booking_client):
 
-        body = booking_helper.build_random_booking()
+        body = booking_client.build_random_booking()
         actual_result = booking_client.create_booking(body)
 
         assert_that(actual_result.status_code).is_equal_to(requests.codes.ok)
@@ -24,8 +24,8 @@ class TestCreateBooking:
     #     ("missing_totalprice_and_depositpaid", ["totalPrice", "depositPaid"], [])
     # ])
     # def test_create_booking_no_req_fields(self, case_id, remove, remove_nested,
-    #                                       booking_client, booking_helper):
-    #     body = booking_helper.make_body(remove=remove, remove_nested=remove_nested)
+    #                                       booking_client, booking_client):
+    #     body = booking_client.make_body(remove=remove, remove_nested=remove_nested)
     #
     #     response = booking_client.create_booking(body)
     #     assert response.status_code == 500

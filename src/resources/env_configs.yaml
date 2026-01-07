@@ -1,0 +1,11 @@
+environments:
+  qa:
+    restful_booker_url: "https://restful-booker.herokuapp.com"
+    username: "admin"
+    password: "password123"
+    json_placeholder_url: "https://jsonplaceholder.typicode.com"
+  dev:
+    restful_booker_url: "https://restful-booker.herokuapp.com"
+    username: "admin"
+    password: "password123"
+    json_placeholder_url: "https://jsonplaceholder.typicode.com"

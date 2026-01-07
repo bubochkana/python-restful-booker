@@ -14,4 +14,5 @@ class Booking(BaseModel):
     totalprice: int = Field(alias="totalPrice")
     depositpaid: bool = Field(alias="depositPaid")
     bookingdates: BookingDates = Field(alias="bookingDates")
-    additionalneeds: Optional[str] = Field(alias="additionalNeeds", default=None)
+    additionalneeds: Optional[str] \
+        = Field(alias="additionalNeeds", default=None)

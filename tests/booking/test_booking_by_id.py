@@ -4,7 +4,8 @@ from src.models.bookings.booking_model import Booking
 
 
 class TestBookingById:
-    def test_booking_id_schema_validation(self, booking_client, booking_helper):
+    def test_booking_id_schema_validation(self,
+                                          booking_client, booking_helper):
         response = booking_client.get_booking_by_id(
             booking_helper.pick_random_booking_id_from_the_existing_list())
 

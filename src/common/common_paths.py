@@ -1,11 +1,17 @@
 from pathlib import Path
 
-root_dir = Path(__file__).resolve().parent.parent.parent
 
+class CommonPaths:
+    @staticmethod
+    def project_root() -> Path:
+        return Path(__file__).resolve().parent.parent.parent
 
-def get_dev_env_dir():
-    return root_dir.joinpath("src").joinpath("resources").joinpath("dev")
+    @staticmethod
+    def env_config_path() -> Path:
+        return (
+            CommonPaths.project_root()
+            / "src"
+            / "resources"
+            / "env_configs.yaml"
+        )
 
-
-def get_qa_env_dir():
-    return root_dir.joinpath("src").joinpath("resources").joinpath("qa")

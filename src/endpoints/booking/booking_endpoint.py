@@ -3,6 +3,7 @@ from typing import Optional
 import requests
 from faker import Faker
 
+from src.clients.booking_client import BookingClient
 from src.models.bookings.booking_id_model import BookingId
 from src.models.bookings.booking_model import Booking
 from src.models.bookings.create_booking_response_model import BookingDates
@@ -76,9 +77,7 @@ class BookingEndpoint:
                        additionalNeeds=faker.name())
 
     def pick_random_booking_id_from_the_existing_list(self) -> str:
-        booking_ids_list = (BookingClient()
-                            .get_booking_endpoint()
-                            .get_all_bookings())
+        booking_ids_list = (self.get_all_bookings())
         my_obj_list: list[BookingId] = [BookingId(**dict_item)
                                         for dict_item
                                         in booking_ids_list.json()]

@@ -5,9 +5,9 @@ from src.utils.env_loader import EnvLoader
 
 class BookingClient:
     def __init__(self):
-        env = EnvLoader().config
+        env = EnvLoader().booking_config
 
-        self.host = str(env.restful_booker_url)
+        self.host = str(env.host)
         self.username = env.username
         self.password = env.password
 

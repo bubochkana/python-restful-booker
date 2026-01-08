@@ -1,0 +1,5 @@
+environments:
+  qa:
+    host: "https://jsonplaceholder.typicode.com"
+  dev:
+    host: "https://jsonplaceholder.typicode.com"

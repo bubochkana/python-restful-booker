@@ -7,8 +7,8 @@ from src.models.bookings.booking_model import Booking
 
 
 class BookingDates(BaseModel):
-    checkin: datetime = Field(alias="checkIn")
-    checkout: datetime = Field(alias="checkOut")
+    checkin: str = Field(alias="checkIn")
+    checkout: str = Field(alias="checkOut")
 
 
 class CreateBookingResponse(BaseModel):

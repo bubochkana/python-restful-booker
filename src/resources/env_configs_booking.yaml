@@ -1,0 +1,9 @@
+environments:
+  qa:
+    host: "https://restful-booker.herokuapp.com"
+    username: "admin"
+    password: "password123"
+  dev:
+    host: "https://restful-booker.herokuapp.com"
+    username: "admin"
+    password: "password123"

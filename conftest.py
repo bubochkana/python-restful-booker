@@ -20,8 +20,3 @@ def pytest_configure(config):
     Used to set configuration before all tests."""
     testing_env = config.getoption("env")
     EnvLoader(test_env=testing_env)
-
-
-@pytest.fixture
-def booking_client():
-    return BookingClient()

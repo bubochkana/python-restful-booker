@@ -5,9 +5,9 @@ from src.utils.env_loader import EnvLoader
 
 class JsonPlaceholderClient:
     def __init__(self):
-        env = EnvLoader().config
+        env = EnvLoader().json_placeholder_config
 
-        self.host = str(env.restful_booker_url)
+        self.host = str(env.host)
 
     def get_posts_endpoint(self) -> PostsEndpoint:
         return PostsEndpoint(self.host)

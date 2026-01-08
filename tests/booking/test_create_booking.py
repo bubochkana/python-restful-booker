@@ -1,18 +1,20 @@
 import requests
 from assertpy import assert_that
+
+from src.clients.booking_client import BookingClient
 from src.helpers.compare_models import CompareModel
 
 
 class TestCreateBooking:
-    def test_create_booking(self, booking_client):
+    def test_create_booking(self):
 
-        body = booking_client.build_random_booking()
-        actual_result = booking_client.create_booking(body)
+        body = BookingClient().get_booking_endpoint().build_random_booking()
+        actual_result = BookingClient().get_booking_endpoint().create_booking(body)
 
         assert_that(actual_result.status_code).is_equal_to(requests.codes.ok)
 
-        comparison_results = (CompareModel().compare_values(
-            body.model_dump(), actual_result.json()['booking']))
+        comparison_results = (CompareModel.compare_values(body.model_dump(),
+                                             actual_result.json()['booking']))
         assert_that(comparison_results,
                     f"Following differences found: "
                     f"{comparison_results}").is_empty()

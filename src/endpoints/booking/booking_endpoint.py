@@ -3,15 +3,14 @@ from typing import Optional
 import requests
 from faker import Faker
 
-from src.clients.booking_client import BookingClient
 from src.models.bookings.booking_id_model import BookingId
-from src.models.bookings.booking_model import Booking
-from src.models.bookings.create_booking_response_model import BookingDates
+from src.models.bookings.booking_model import Booking, BookingDates
 
 
 class BookingEndpoint:
-    def __init__(self, host: str):
+    def __init__(self, host: str, auth_endpoint = None):
         self.host = host
+        self.auth_endpoint = auth_endpoint
 
     def get_all_bookings(
         self,
@@ -39,7 +38,7 @@ class BookingEndpoint:
             f"{self.host}/booking", json=body.model_dump())
 
     def update_booking(self, booking_id, body, headers=None):
-        token = BookingClient().get_auth_endpoint().get_token()
+        token = self.auth_endpoint.get_token()
         default_headers = {
             "Content-Type": "application/json",
             "Accept": "application/json",
@@ -51,10 +50,10 @@ class BookingEndpoint:
         return requests.put(
             f"{self.host}/booking/{booking_id}",
             json=body.model_dump(),
-            headers=final_headers).json()
+            headers=final_headers)
 
     def delete_booking(self, booking_id, headers=None):
-        token = BookingClient().get_auth_endpoint().get_token()
+        token = self.auth_endpoint.get_token()
         default_headers = {
             "Content-Type": "application/json",
             "Cookie": f"token={token}"
@@ -67,14 +66,14 @@ class BookingEndpoint:
 
     def build_random_booking(self) -> Booking:
         faker: Faker = Faker()
-        return Booking(firstName=faker.first_name(),
-                       lastName=faker.last_name(),
-                       totalPrice=faker.random_int(min=1, max=500),
-                       depositPaid=faker.boolean(),
-                       bookingDates=BookingDates(
-                           checkIn=faker.date(pattern="%Y-%m-%d"),
-                           checkOut=faker.date(pattern="%Y-%m-%d")),
-                       additionalNeeds=faker.name())
+        return Booking(firstname=faker.first_name(),
+                       lastname=faker.last_name(),
+                       totalprice=faker.random_int(min=1, max=500),
+                       depositpaid=faker.boolean(),
+                       bookingdates=BookingDates(
+                           checkin=faker.date(pattern="%Y-%m-%d"),
+                           checkout=faker.date(pattern="%Y-%m-%d")),
+                       additionalneeds=faker.name())
 
     def pick_random_booking_id_from_the_existing_list(self) -> str:
         booking_ids_list = (self.get_all_bookings())

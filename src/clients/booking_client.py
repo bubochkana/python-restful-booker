@@ -11,8 +11,10 @@ class BookingClient:
         self.username = env.username
         self.password = env.password
 
+        self._auth_endpoint = AuthEndpoint(self.host, self.username, self.password)
+
     def get_auth_endpoint(self) -> AuthEndpoint:
-        return AuthEndpoint(self.host, self.username, self.password)
+        return self._auth_endpoint
 
     def get_booking_endpoint(self) -> BookingEndpoint:
-        return BookingEndpoint(self.host)
+        return BookingEndpoint(self.host, auth_endpoint=self._auth_endpoint)

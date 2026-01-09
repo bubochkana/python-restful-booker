@@ -12,6 +12,8 @@ class CommonPaths:
             CommonPaths.project_root()
             / "src"
             / "resources"
-            / "env_configs.yaml"
+            / "env_configs_booking.yaml"
         )
+
+    #TODO - maybe an additional method is needed for json placeholder
 

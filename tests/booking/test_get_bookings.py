@@ -10,12 +10,10 @@ class TestBookings:
         response = BookingClient().get_booking_endpoint().get_all_bookings()
         assert_that(response.status_code).is_equal_to(requests.codes.ok)
 
-    def test_all_booking_ids_schema_validation(self):
-
+    def test_all_bookings_schema_validation(self):
         response = BookingClient().get_booking_endpoint().get_all_bookings()
-
-        # TODO - not sure how to create the assert here and validate the schema
-        BookingId.model_validate_json(json_data=response.json())
+        for booking_id in response.json():
+            BookingId.model_validate(booking_id)
 
     def test_filter_bookings_by_firstname_and_lastname(self):
         response = BookingClient().get_booking_endpoint().get_all_bookings(

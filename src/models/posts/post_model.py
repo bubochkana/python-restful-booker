@@ -1,8 +1,8 @@
 from pydantic import BaseModel
 
 
-class BookingDates(BaseModel):
+class PostModel(BaseModel):
+    userId: int
     id: int
     title: str
     body: str
-    userId: int

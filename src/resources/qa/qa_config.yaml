@@ -1,7 +1,0 @@
-# The configuration specific to Restful-Booker
-restful_booker_url: "https://restful-booker.herokuapp.com"
-username:  "admin"
-password: "password123"
-
-# The configuration specific to JSONPlaceholder
-json_placeholder_url: "https://jsonplaceholder.typicode.com"

@@ -1,0 +1,75 @@
+from typing import Dict, Any, List
+
+
+class CompareModel:
+    @staticmethod
+    def compare_dicts(expected_results: Dict[str, Any],
+                      actual_results: Dict[str, Any]):
+        """Compare two dictionaries and return a list of differences."""
+        comparison_results = []
+        for key, value in expected_results.items():
+            if key not in actual_results:
+                comparison_results.append(
+                    f"Key '{key}' is missing in actual results.")
+                continue
+
+            expected_value = expected_results[key]
+            actual_value = actual_results[key]
+            if (isinstance(expected_value, dict)
+                    and isinstance(actual_value, dict)):
+                (comparison_results.extend(
+                    CompareModel.compare_dicts(expected_value, actual_value)))
+            elif (isinstance(expected_value, list)
+                  and isinstance(actual_value, list)):
+                comparison_results.extend(
+                    CompareModel.compare_lists(expected_value, actual_value))
+            elif expected_value != actual_value:
+                comparison_results.append(
+                    f"Value mismatch for key '{key}':"
+                    f" expected '{expected_value}', got '{actual_value}'."
+                )
+
+        return comparison_results
+
+    @staticmethod
+    def compare_lists(expected_results: List[Any],
+                      actual_results: List[Any]):
+        """Compare two lists and return a list of differences."""
+        comparison_results = []
+        for index, expected_value in enumerate(expected_results):
+            if index >= len(actual_results):
+                (comparison_results
+                 .append(f"Index '{index}' is missing in actual results."))
+                continue
+            actual_value = actual_results[index]
+            if (isinstance(expected_value, dict)
+                    and isinstance(actual_value, dict)):
+                comparison_results.extend(
+                    CompareModel.compare_dicts(expected_value, actual_value))
+            elif (isinstance(expected_value, list)
+                  and isinstance(actual_value, list)):
+                comparison_results.extend(
+                    CompareModel.compare_lists(expected_value, actual_value))
+            elif expected_value != actual_value:
+                comparison_results.append(
+                    f"Value mismatch at index '{index}':"
+                    f" expected '{expected_value}', got '{actual_value}'."
+                )
+
+        return comparison_results
+
+    @staticmethod
+    def compare_values(expected_results: Any, actual_results: Any):
+        """Compare two values and return a list of differences."""
+        if (isinstance(expected_results, dict)
+                and isinstance(actual_results, dict)):
+            return CompareModel.compare_dicts(expected_results, actual_results)
+        elif (isinstance(expected_results, list)
+              and isinstance(actual_results, list)):
+            return CompareModel.compare_lists(expected_results, actual_results)
+        else:
+            if expected_results != actual_results:
+                return [f"Value mismatch: expected '{expected_results}', "
+                        f"got '{actual_results}'."]
+            else:
+                return []

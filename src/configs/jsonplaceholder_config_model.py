@@ -1,12 +1,15 @@
+from typing import Dict, Literal
+
 from pydantic_settings import BaseSettings
 import yaml
 
 
-class Settings(BaseSettings):
-    restful_booker_url: str
-    username: str
-    password: str
-    json_placeholder_url: str
+class JsonPlaceholderEnvironmentConfig(BaseSettings):
+    host: str
+
+
+class AppConfig(BaseSettings):
+    environments: Dict[Literal["dev", "qa"], JsonPlaceholderEnvironmentConfig]
 
     @classmethod
     def read_yaml(cls, path):

@@ -8,7 +8,7 @@ from src.models.bookings.booking_model import Booking, BookingDates
 
 
 class BookingEndpoint:
-    def __init__(self, host: str, auth_endpoint = None):
+    def __init__(self, host: str, auth_endpoint=None):
         self.host = host
         self.auth_endpoint = auth_endpoint
 

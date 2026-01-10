@@ -9,7 +9,8 @@ class TestCreateBooking:
     def test_create_booking(self):
 
         body = BookingClient().get_booking_endpoint().build_random_booking()
-        actual_result = BookingClient().get_booking_endpoint().create_booking(body)
+        actual_result = (BookingClient().get_booking_endpoint()
+                         .create_booking(body))
 
         assert_that(actual_result.status_code).is_equal_to(requests.codes.ok)
 

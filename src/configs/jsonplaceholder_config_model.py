@@ -7,6 +7,7 @@ import yaml
 class JsonPlaceholderEnvironmentConfig(BaseSettings):
     host: str
 
+
 class AppConfig(BaseSettings):
     environments: Dict[Literal["dev", "qa"], JsonPlaceholderEnvironmentConfig]
 

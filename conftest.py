@@ -1,5 +1,3 @@
-import pytest
-from src.clients.booking_client import BookingClient
 from src.utils.env_loader import EnvLoader
 
 

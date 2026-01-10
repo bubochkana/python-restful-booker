@@ -9,13 +9,15 @@ class TestBookingById:
     def test_booking_schema_validation(self):
         # TODO - not sure how to avoid code duplication without the fixture for booking_client in the conftest.py
         response = BookingClient().get_booking_endpoint().get_booking_by_id(
-            BookingClient().get_booking_endpoint().pick_random_booking_id_from_the_existing_list())
+            BookingClient().get_booking_endpoint()
+            .pick_random_booking_id_from_the_existing_list())
 
         Booking.model_validate(response.json())
 
     def test_get_booking_by_id(self):
         response = BookingClient().get_booking_endpoint().get_booking_by_id(
-            BookingClient().get_booking_endpoint().pick_random_booking_id_from_the_existing_list())
+            BookingClient().get_booking_endpoint()
+            .pick_random_booking_id_from_the_existing_list())
         assert_that(response.json()).contains_key("firstname")
         assert_that(response.json()).contains_key("lastname")
         assert_that(response.json()).contains_key("totalprice")

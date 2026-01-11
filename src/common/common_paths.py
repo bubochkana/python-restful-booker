@@ -7,7 +7,7 @@ class CommonPaths:
         return Path(__file__).resolve().parent.parent.parent
 
     @staticmethod
-    def env_config_path() -> Path:
+    def env_booking_config_path() -> Path:
         return (
             CommonPaths.project_root()
             / "src"
@@ -15,5 +15,12 @@ class CommonPaths:
             / "env_configs_booking.yaml"
         )
 
-    #TODO - maybe an additional method is needed for json placeholder
+    @staticmethod
+    def env_json_placeholder_config_path() -> Path:
+        return (
+                CommonPaths.project_root()
+                / "src"
+                / "resources"
+                / "env_configs_json_placeholder.yaml"
+        )
 

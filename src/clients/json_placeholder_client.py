@@ -1,3 +1,4 @@
+from src.common.common_paths import CommonPaths
 from src.endpoints.json_placeholder.comments_endpoint import CommentsEndpoint
 from src.endpoints.json_placeholder.posts_endpoint import PostsEndpoint
 from src.utils.env_loader import EnvLoader
@@ -5,7 +6,7 @@ from src.utils.env_loader import EnvLoader
 
 class JsonPlaceholderClient:
     def __init__(self):
-        env = EnvLoader().json_placeholder_config
+        env = EnvLoader(CommonPaths.env_json_placeholder_config_path()).json_placeholder_config
 
         self.host = str(env.host)
 

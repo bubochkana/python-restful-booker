@@ -15,8 +15,16 @@ class CommentsEndpoint:
     def get_all_comments_by_post_id(self, post_id):
         return requests.get(f"{self.host}/comments?postId={post_id}")
 
+    def get_comment(self, comment_id):
+        return requests.get(f"{self.host}/comments?comment_id={comment_id}")
+
     def create_comment_for_post(self, body: CommentModel, post_id):
-        return requests.post(f"{self.host}/posts/{post_id}/comments", json=body.model_dump())
+        return requests.post(
+            f"{self.host}/posts/{post_id}/comments",
+            json=body.model_dump())
+
+    def delete_post_by_id(self, post_id):
+        return requests.delete(f"{self.host}/posts/{post_id}")
 
     def pick_random_comment_id_for_post(self, post_id) -> str:
         comments_for_post_id_list = self.get_all_comments_by_post_id(post_id)

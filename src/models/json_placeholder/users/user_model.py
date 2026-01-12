@@ -1,6 +1,6 @@
-from typing import Optional
+from typing import List
 
-from pydantic import BaseModel
+from pydantic import BaseModel, RootModel
 
 
 class UserAddressGeoModel(BaseModel):
@@ -20,12 +20,21 @@ class UserCompanyModel(BaseModel):
     bs: str
 
 class UserModel(BaseModel):
-    id: Optional[int] = None
+    id: int = None
     name: str
     email: str
     address: UserAddressModel
     phone: str
     website: str
     company: UserCompanyModel
+
+class UserListingModel(BaseModel):
+    userId: int
+    id: int
+    title: str
+    body: str
+
+class UsersListingModel(RootModel[List[UserListingModel]]):
+    pass
 
 

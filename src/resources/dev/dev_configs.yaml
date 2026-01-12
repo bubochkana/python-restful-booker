@@ -1,0 +1,7 @@
+clients:
+    booking:
+      host: "https://restful-booker.herokuapp.com"
+      username: "admin"
+      password: "password123"
+    jsonPlaceholder:
+      host: "https://jsonplaceholder.typicode.com"

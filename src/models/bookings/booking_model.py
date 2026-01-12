@@ -15,3 +15,14 @@ class BookingModel(BaseModel):
     depositpaid: bool
     bookingdates: BookingDatesModel
     additionalneeds: Optional[str]
+
+class BookingIdModel(BaseModel):
+    bookingid: int
+
+class BookingDates(BaseModel):
+    checkin: str
+    checkout: str
+
+class CreateBookingResponse(BaseModel):
+    bookingid: BookingIdModel
+    booking: BookingModel

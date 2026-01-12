@@ -2,6 +2,7 @@ import random
 
 import requests
 from faker import Faker
+from requests import Response
 
 from src.endpoints.json_placeholder.users_endpoint import UsersEndpoint
 from src.models.json_placeholder.posts.post_model import PostModel
@@ -12,26 +13,28 @@ class PostsEndpoint:
         self.host = host
         self.users_endpoint = UsersEndpoint(host)
 
-    def get_all_posts(self):
+    def get_all_posts(self) -> Response:
         return requests.get(f"{self.host}/posts")
 
-    def get_post_by_id(self, post_id):
+    def get_post_by_id(self, post_id) -> Response:
         return requests.get(f"{self.host}/posts/{post_id}")
 
-    def get_all_comments_for_the_post_id(self, post_id):
+    def get_all_comments_for_the_post_id(self, post_id) -> Response:
         return requests.get(f"{self.host}/posts/{post_id}/comments")
 
-    def create_post(self, body: PostModel):
+    def create_post(self, body: PostModel) -> Response:
         return requests.post(f"{self.host}/posts", json=body.model_dump())
 
-    def delete_post_by_id(self, post_id):
+    def delete_post_by_id(self, post_id) -> Response:
         return requests.delete(f"{self.host}/posts/{post_id}")
 
-    def update_whole_post_by_id(self, post_id):
-        return requests.put(f"{self.host}/posts/{post_id}")
+    def update_whole_post_by_id(self, body: PostModel, post_id) -> Response:
+        return requests.put(
+            f"{self.host}/posts/{post_id}",
+            json=body.model_dump())
 
-    def update_partially_post_by_id(self, post_id):
-        return requests.patch(f"{self.host}/posts/{post_id}")
+    def update_partially_post_by_id(self, body: PostModel, post_id) -> Response:
+        return requests.patch(f"{self.host}/posts/{post_id}", json=body)
 
     def pick_random_post_id(self) -> int:
         posts_ids_list = self.get_all_posts()

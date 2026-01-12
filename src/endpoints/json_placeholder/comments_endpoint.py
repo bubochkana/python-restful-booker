@@ -2,6 +2,7 @@ import random
 
 import requests
 from faker import Faker
+from requests import Response
 
 from src.endpoints.json_placeholder.posts_endpoint import PostsEndpoint
 from src.models.json_placeholder.comments.comment_model import CommentModel
@@ -12,18 +13,18 @@ class CommentsEndpoint:
         self.host = host
         self.posts_endpoint = PostsEndpoint(host)
 
-    def get_all_comments_by_post_id(self, post_id):
+    def get_all_comments_by_post_id(self, post_id) -> Response:
         return requests.get(f"{self.host}/comments?postId={post_id}")
 
-    def get_comment(self, comment_id):
+    def get_comment(self, comment_id) -> Response:
         return requests.get(f"{self.host}/comments?comment_id={comment_id}")
 
-    def create_comment_for_post(self, body: CommentModel, post_id):
+    def create_comment_for_post(self, body: CommentModel, post_id) -> Response:
         return requests.post(
             f"{self.host}/posts/{post_id}/comments",
             json=body.model_dump())
 
-    def delete_post_by_id(self, post_id):
+    def delete_post_by_id(self, post_id) -> Response:
         return requests.delete(f"{self.host}/posts/{post_id}")
 
     def pick_random_comment_id_for_post(self, post_id) -> str:

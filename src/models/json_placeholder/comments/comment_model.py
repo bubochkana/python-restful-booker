@@ -1,11 +1,14 @@
-from typing import Optional
+from typing import List
 
-from pydantic import BaseModel
+from pydantic import BaseModel, RootModel
 
 
 class CommentModel(BaseModel):
     postId: int
-    id: Optional[int] = None
+    id: int = None
     name: str
     email: str
     body: str
+
+class CommentsListingModel(RootModel[List[CommentModel]]):
+    pass

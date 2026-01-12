@@ -7,17 +7,22 @@ from src.models.bookings.booking_model import BookingModel
 
 class TestBookingById:
     def test_booking_schema_validation(self):
-        # TODO - not sure how to avoid code duplication without the fixture for booking_client in the conftest.py
-        response = BookingClient().get_booking_endpoint().get_booking_by_id(
-            BookingClient().get_booking_endpoint()
-            .pick_random_booking_id())
+        client = BookingClient()
+        booking_endpoint = client.booking_endpoint()
+
+        response = booking_endpoint.get_booking_by_id(
+            booking_endpoint.pick_random_booking_id())
 
         BookingModel.model_validate(response.json())
 
     def test_get_booking_by_id(self):
-        response = BookingClient().get_booking_endpoint().get_booking_by_id(
-            BookingClient().get_booking_endpoint()
-            .pick_random_booking_id())
+        client = BookingClient()
+        booking_endpoint = client.booking_endpoint()
+
+        response = booking_endpoint.get_booking_by_id(
+            booking_endpoint.pick_random_booking_id())
+        assert_that(response.status_code).is_equal_to(requests.codes.ok)
+
         assert_that(response.json()).contains_key("firstname")
         assert_that(response.json()).contains_key("lastname")
         assert_that(response.json()).contains_key("totalprice")
@@ -25,4 +30,3 @@ class TestBookingById:
         assert_that(response.json()['bookingdates']).contains_key("checkin")
         assert_that(response.json()['bookingdates']).contains_key("checkout")
         assert_that(response.json()).contains_key("additionalneeds")
-        assert_that(response.status_code).is_equal_to(requests.codes.ok)

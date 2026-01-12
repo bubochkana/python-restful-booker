@@ -7,10 +7,11 @@ from src.helpers.compare_models import CompareModel
 
 class TestCreateBooking:
     def test_create_booking(self):
+        client = BookingClient()
+        booking_endpoint = client.booking_endpoint()
 
-        body = BookingClient().get_booking_endpoint().build_random_booking()
-        actual_result = (BookingClient().get_booking_endpoint()
-                         .create_booking(body))
+        body = booking_endpoint.build_random_booking()
+        actual_result = booking_endpoint.create_booking(body)
 
         assert_that(actual_result.status_code).is_equal_to(requests.codes.ok)
 

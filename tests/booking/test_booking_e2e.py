@@ -8,14 +8,14 @@ from src.helpers.compare_models import CompareModel
 class TestBookingE2E:
     def test_booking_e2e(self):
         client = BookingClient()
-        booking_endpoint = client.get_booking_endpoint()
+        booking_endpoint = client.booking_endpoint()
 
         # create a booking
         create_request_body = booking_endpoint.build_random_booking()
         create_booking_response = (booking_endpoint.create_booking(
             create_request_body))
 
-        comparison_results = (CompareModel.compare_values(
+        comparison_results = (CompareModel().compare_values(
             create_request_body.model_dump(),
             create_booking_response.json()['booking']))
         assert_that(comparison_results,
@@ -27,7 +27,7 @@ class TestBookingE2E:
         get_booking_response = (booking_endpoint
                                 .get_booking_by_id(booking_id))
 
-        comparison_results = (CompareModel.compare_values(
+        comparison_results = (CompareModel().compare_values(
             create_request_body.model_dump(),
             get_booking_response.json()))
         assert_that(comparison_results,

@@ -7,11 +7,11 @@ from src.models.json_placeholder.posts.post_model import PostModel
 
 class TestPosts:
     def test_get_all_posts(self):
-        response = JsonPlaceholderClient().get_posts_endpoint().get_all_posts()
+        response = JsonPlaceholderClient().posts_endpoint().get_all_posts()
         assert_that(response.status_code).is_equal_to(requests.codes.ok)
 
     def test_all_posts_schema_validation(self):
-        response = JsonPlaceholderClient().get_posts_endpoint().get_all_posts()
+        response = JsonPlaceholderClient().posts_endpoint().get_all_posts()
         for post in response.json():
             PostModel.model_validate(post)
 

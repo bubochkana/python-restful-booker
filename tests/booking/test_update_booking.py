@@ -9,13 +9,13 @@ class TestUpdateBooking:
     def test_update_booking(self):
 
         booking_id_to_update = (BookingClient()
-                                .get_booking_endpoint()
+                                .booking_endpoint()
                                 .pick_random_booking_id())
 
-        random_booking = (BookingClient().get_booking_endpoint()
+        random_booking = (BookingClient().booking_endpoint()
                           .build_random_booking())
         updated_booking = (BookingClient()
-                           .get_booking_endpoint()
+                           .booking_endpoint()
                            .update_booking(
             booking_id_to_update, random_booking))
 
@@ -27,11 +27,11 @@ class TestUpdateBooking:
 
     def test_update_booking_no_auth_header(self):
         booking_id_to_update \
-            = (BookingClient().get_booking_endpoint()
+            = (BookingClient().booking_endpoint()
                .pick_random_booking_id())
-        response = BookingClient().get_booking_endpoint().update_booking(
+        response = BookingClient().booking_endpoint().update_booking(
             booking_id_to_update,
-            BookingClient().get_booking_endpoint().build_random_booking(),
+            BookingClient().booking_endpoint().build_random_booking(),
             headers={"Content-Type": "application/json",
                      "Accept": "application/json"})
         assert_that(response.status_code).is_equal_to(requests.codes.forbidden)

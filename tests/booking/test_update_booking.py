@@ -10,7 +10,7 @@ class TestUpdateBooking:
 
         booking_id_to_update = (BookingClient()
                                 .get_booking_endpoint()
-                                .pick_random_booking_id_from_the_existing_list())
+                                .pick_random_booking_id())
 
         random_booking = (BookingClient().get_booking_endpoint()
                           .build_random_booking())
@@ -28,7 +28,7 @@ class TestUpdateBooking:
     def test_update_booking_no_auth_header(self):
         booking_id_to_update \
             = (BookingClient().get_booking_endpoint()
-               .pick_random_booking_id_from_the_existing_list())
+               .pick_random_booking_id())
         response = BookingClient().get_booking_endpoint().update_booking(
             booking_id_to_update,
             BookingClient().get_booking_endpoint().build_random_booking(),

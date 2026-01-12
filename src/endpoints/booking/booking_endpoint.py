@@ -3,8 +3,8 @@ from typing import Optional
 import requests
 from faker import Faker
 
-from src.models.bookings.booking_id_model import BookingId
-from src.models.bookings.booking_model import Booking, BookingDates
+from src.models.bookings.booking_id_model import BookingIdModel
+from src.models.bookings.booking_model import BookingModel, BookingDatesModel
 
 
 class BookingEndpoint:
@@ -33,7 +33,7 @@ class BookingEndpoint:
     def get_booking_by_id(self, booking_id):
         return requests.get(f"{self.host}/booking/{booking_id}")
 
-    def create_booking(self, body: Booking):
+    def create_booking(self, body: BookingModel):
         return requests.post(
             f"{self.host}/booking", json=body.model_dump())
 
@@ -64,20 +64,20 @@ class BookingEndpoint:
         return requests.delete(
             f"{self.host}/booking/{booking_id}", headers=final_headers)
 
-    def build_random_booking(self) -> Booking:
+    def build_random_booking(self) -> BookingModel:
         faker: Faker = Faker()
-        return Booking(firstname=faker.first_name(),
-                       lastname=faker.last_name(),
-                       totalprice=faker.random_int(min=1, max=500),
-                       depositpaid=faker.boolean(),
-                       bookingdates=BookingDates(
-                           checkin=faker.date(pattern="%Y-%m-%d"),
-                           checkout=faker.date(pattern="%Y-%m-%d")),
-                       additionalneeds=faker.name())
+        return BookingModel(firstname=faker.first_name(),
+                            lastname=faker.last_name(),
+                            totalprice=faker.random_int(min=1, max=500),
+                            depositpaid=faker.boolean(),
+                            bookingdates=BookingDatesModel(
+                                checkin=faker.date(pattern="%Y-%m-%d"),
+                                checkout=faker.date(pattern="%Y-%m-%d")),
+                            additionalneeds=faker.name())
 
-    def pick_random_booking_id_from_the_existing_list(self) -> str:
+    def pick_random_booking_id(self) -> str:
         booking_ids_list = (self.get_all_bookings())
-        my_obj_list: list[BookingId] = [BookingId(**dict_item)
-                                        for dict_item
-                                        in booking_ids_list.json()]
+        my_obj_list: list[BookingIdModel] = [BookingIdModel(**dict_item)
+                                             for dict_item
+                                             in booking_ids_list.json()]
         return str(random.choice(my_obj_list).bookingid)

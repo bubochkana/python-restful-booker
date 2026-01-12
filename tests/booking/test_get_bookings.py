@@ -2,7 +2,7 @@ import requests
 from assertpy import assert_that
 
 from src.clients.booking_client import BookingClient
-from src.models.bookings.booking_id_model import BookingId
+from src.models.bookings.booking_id_model import BookingIdModel
 
 
 class TestBookings:
@@ -13,7 +13,7 @@ class TestBookings:
     def test_all_bookings_schema_validation(self):
         response = BookingClient().get_booking_endpoint().get_all_bookings()
         for booking_id in response.json():
-            BookingId.model_validate(booking_id)
+            BookingIdModel.model_validate(booking_id)
 
     def test_filter_bookings_by_firstname_and_lastname(self):
         response = BookingClient().get_booking_endpoint().get_all_bookings(

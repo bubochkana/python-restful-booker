@@ -17,13 +17,13 @@ class TestDeleteBooking:
     def test_delete_booking_no_headers(self):
         response = BookingClient().get_booking_endpoint().delete_booking(
             BookingClient().get_booking_endpoint()
-            .pick_random_booking_id_from_the_existing_list(), {})
+            .pick_random_booking_id(), {})
         assert_that(response.status_code).is_equal_to(requests.codes.forbidden)
 
     def test_delete_booking_no_auth_header(self):
         response = BookingClient().get_booking_endpoint().delete_booking(
             BookingClient().get_booking_endpoint()
-            .pick_random_booking_id_from_the_existing_list(),
+            .pick_random_booking_id(),
             headers={"Content-Type": "application/json"})
         assert_that(response.status_code).is_equal_to(requests.codes.forbidden)
 

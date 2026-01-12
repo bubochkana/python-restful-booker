@@ -2,7 +2,7 @@ from assertpy import assert_that
 import requests
 
 from src.clients.booking_client import BookingClient
-from src.models.bookings.booking_model import Booking
+from src.models.bookings.booking_model import BookingModel
 
 
 class TestBookingById:
@@ -10,14 +10,14 @@ class TestBookingById:
         # TODO - not sure how to avoid code duplication without the fixture for booking_client in the conftest.py
         response = BookingClient().get_booking_endpoint().get_booking_by_id(
             BookingClient().get_booking_endpoint()
-            .pick_random_booking_id_from_the_existing_list())
+            .pick_random_booking_id())
 
-        Booking.model_validate(response.json())
+        BookingModel.model_validate(response.json())
 
     def test_get_booking_by_id(self):
         response = BookingClient().get_booking_endpoint().get_booking_by_id(
             BookingClient().get_booking_endpoint()
-            .pick_random_booking_id_from_the_existing_list())
+            .pick_random_booking_id())
         assert_that(response.json()).contains_key("firstname")
         assert_that(response.json()).contains_key("lastname")
         assert_that(response.json()).contains_key("totalprice")

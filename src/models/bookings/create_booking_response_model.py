@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
-from src.models.bookings.booking_id_model import BookingId
-from src.models.bookings.booking_model import Booking
+from src.models.bookings.booking_id_model import BookingIdModel
+from src.models.bookings.booking_model import BookingModel
 
 
 class BookingDates(BaseModel):
@@ -10,6 +10,6 @@ class BookingDates(BaseModel):
 
 
 class CreateBookingResponse(BaseModel):
-    bookingid: BookingId
-    booking: Booking
+    bookingid: BookingIdModel
+    booking: BookingModel
 

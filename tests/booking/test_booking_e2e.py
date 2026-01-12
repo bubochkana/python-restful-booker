@@ -7,13 +7,13 @@ from src.helpers.compare_models import CompareModel
 
 class TestBookingE2E:
     def test_booking_e2e(self):
+        client = BookingClient()
+        booking_endpoint = client.get_booking_endpoint()
+
         # create a booking
-        create_request_body = (BookingClient()
-                               .get_booking_endpoint()
-                               .build_random_booking())
-        create_booking_response = (BookingClient()
-                                   .get_booking_endpoint()
-                                   .create_booking(create_request_body))
+        create_request_body = booking_endpoint.build_random_booking()
+        create_booking_response = (booking_endpoint.create_booking(
+            create_request_body))
 
         comparison_results = (CompareModel.compare_values(
             create_request_body.model_dump(),
@@ -24,8 +24,7 @@ class TestBookingE2E:
 
         booking_id = create_booking_response.json()['bookingid']
         # get the booking
-        get_booking_response = (BookingClient()
-                                .get_booking_endpoint()
+        get_booking_response = (booking_endpoint
                                 .get_booking_by_id(booking_id))
 
         comparison_results = (CompareModel.compare_values(
@@ -36,11 +35,10 @@ class TestBookingE2E:
                     f"{comparison_results}").is_empty()
 
         # delete the booking
-        BookingClient().get_booking_endpoint().delete_booking(booking_id)
+        booking_endpoint.delete_booking(booking_id)
 
         # get the booking
-        get_booking_response_after_deletion = (BookingClient()
-                                               .get_booking_endpoint()
+        get_booking_response_after_deletion = (booking_endpoint
                                                .get_booking_by_id(booking_id))
         (assert_that(get_booking_response_after_deletion.status_code)
          .is_equal_to(requests.codes.not_found))

@@ -1,5 +1,5 @@
 from pydantic import BaseModel
 
 
-class BookingId(BaseModel):
+class BookingIdModel(BaseModel):
     bookingid: int

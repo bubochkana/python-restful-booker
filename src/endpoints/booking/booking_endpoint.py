@@ -14,14 +14,14 @@ class BookingEndpoint:
 
     def get_all_bookings(
         self,
-        firstname: str = None,
-        lastname: str = None,
+        firstName: str = None,
+        lastName: str = None,
         checkin: str = None,
         checkout: str = None,
     ) -> Response:
         params = {
-            "firstname": firstname,
-            "lastname": lastname,
+            "firstName": firstName,
+            "lastName": lastName,
             "checkin": checkin,
             "checkout": checkout}
 
@@ -66,14 +66,14 @@ class BookingEndpoint:
 
     def build_random_booking(self) -> BookingModel:
         faker: Faker = Faker()
-        return BookingModel(firstname=faker.first_name(),
-                            lastname=faker.last_name(),
-                            totalprice=faker.random_int(min=1, max=500),
-                            depositpaid=faker.boolean(),
-                            bookingdates=BookingDatesModel(
-                                checkin=faker.date(pattern="%Y-%m-%d"),
-                                checkout=faker.date(pattern="%Y-%m-%d")),
-                            additionalneeds=faker.name())
+        return BookingModel(firstName=faker.first_name(),
+                            lastName=faker.last_name(),
+                            totalPrice=faker.random_int(min=1, max=500),
+                            depositPaid=faker.boolean(),
+                            bookingDates=BookingDatesModel(
+                                checkIn=faker.date(pattern="%Y-%m-%d"),
+                                checkOut=faker.date(pattern="%Y-%m-%d")),
+                            additionalNeeds=faker.name())
 
     def pick_random_booking_id(self) -> str:
         booking_ids_list = (self.get_all_bookings())

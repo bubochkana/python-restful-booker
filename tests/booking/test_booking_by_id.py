@@ -19,14 +19,15 @@ class TestBookingById:
         client = BookingClient()
         booking_endpoint = client.booking_endpoint()
 
-        response = booking_endpoint.get_booking_by_id(
-            booking_endpoint.pick_random_booking_id())
+        response = booking_endpoint.get_booking_by_id(booking_endpoint.pick_random_booking_id())
         assert_that(response.status_code).is_equal_to(requests.codes.ok)
 
-        assert_that(response.json()).contains_key("firstname")
-        assert_that(response.json()).contains_key("lastname")
-        assert_that(response.json()).contains_key("totalprice")
-        assert_that(response.json()).contains_key("depositpaid")
-        assert_that(response.json()['bookingdates']).contains_key("checkin")
-        assert_that(response.json()['bookingdates']).contains_key("checkout")
-        assert_that(response.json()).contains_key("additionalneeds")
+        booking_model = BookingModel.model_validate(response.json()).model_dump()
+        assert_that(booking_model).contains_key("firstname")
+        assert_that(booking_model).contains_key("lastname")
+        assert_that(booking_model).contains_key("totalprice")
+        assert_that(booking_model).contains_key("depositpaid")
+        assert_that(booking_model['bookingdates']).contains_key("checkin")
+        assert_that(booking_model['bookingdates']).contains_key("checkout")
+        assert_that(booking_model).contains_key("additionalneeds")
+

@@ -27,7 +27,7 @@ class TestBookings:
         booking_endpoint = client.booking_endpoint()
 
         response = booking_endpoint.get_all_bookings(
-            firstname="John", lastname="Smith")
+            firstName="John", lastName="Smith")
         assert_that(response.json()).is_not_empty()
 
     def generate_checkin_checkout_dates(self):

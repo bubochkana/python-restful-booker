@@ -1,28 +1,30 @@
-from typing import Optional
-
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, ConfigDict
 
 
 class BookingDatesModel(BaseModel):
-    checkin: str
-    checkout: str
+    model_config = ConfigDict(populate_by_name=True)
+
+    checkin: str = Field(alias = "checkIn")
+    checkout: str = Field(alias = "checkOut")
 
 
 class BookingModel(BaseModel):
-    firstname: str
-    lastname: str
-    totalprice: int
-    depositpaid: bool
-    bookingdates: BookingDatesModel
-    additionalneeds: Optional[str]
+    model_config = ConfigDict(populate_by_name=True)
+
+    firstname: str = Field(alias = "firstName")
+    lastname: str = Field(alias = "lastName")
+    totalprice: int = Field(alias = "totalPrice")
+    depositpaid: bool = Field(alias = "depositPaid")
+    bookingdates: BookingDatesModel = Field(alias = "bookingDates")
+    additionalneeds: str = Field(alias = "additionalNeeds", default=None)
 
 class BookingIdModel(BaseModel):
-    bookingid: int
+    model_config = ConfigDict(populate_by_name=True)
 
-class BookingDates(BaseModel):
-    checkin: str
-    checkout: str
+    bookingid: int = Field(alias = "bookingId")
 
 class CreateBookingResponse(BaseModel):
-    bookingid: BookingIdModel
+    model_config = ConfigDict(populate_by_name=True)
+
+    bookingid: int = Field(alias = "bookingId")
     booking: BookingModel

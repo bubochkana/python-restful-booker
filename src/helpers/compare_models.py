@@ -15,16 +15,13 @@ class CompareModel:
                     f"Key '{key}' is missing in actual results.")
                 continue
 
-            expected_value = expected_results[key]
+            expected_value = value
             actual_value = actual_results[key]
-            if (isinstance(expected_value, dict)
-                    and isinstance(actual_value, dict)):
-                (self.comparison_results.extend(
-                    self.compare_dicts(expected_value, actual_value)))
-            elif (isinstance(expected_value, list)
-                  and isinstance(actual_value, list)):
+            if isinstance(expected_value, dict) and isinstance(actual_value, dict):
+                    self.compare_dicts(expected_value, actual_value)
+            elif isinstance(expected_value, list) and isinstance(actual_value, list):
                 self.comparison_results.extend(
-                    CompareModel.compare_lists(expected_value, actual_value))
+                    self.compare_lists(expected_value, actual_value))
             elif expected_value != actual_value:
                 self.comparison_results.append(
                     f"Value mismatch for key '{key}':"
@@ -45,11 +42,11 @@ class CompareModel:
             if (isinstance(expected_value, dict)
                     and isinstance(actual_value, dict)):
                 self.comparison_results.extend(
-                    CompareModel.compare_dicts(expected_value, actual_value))
+                    self.compare_dicts(expected_value, actual_value))
             elif (isinstance(expected_value, list)
                   and isinstance(actual_value, list)):
                 self.comparison_results.extend(
-                    CompareModel.compare_lists(expected_value, actual_value))
+                    self.compare_lists(expected_value, actual_value))
             elif expected_value != actual_value:
                 self.comparison_results.append(
                     f"Value mismatch at index '{index}':"
@@ -67,7 +64,7 @@ class CompareModel:
             return self.compare_dicts(expected_results, actual_results)
         elif (isinstance(expected_results, list)
               and isinstance(actual_results, list)):
-            return CompareModel.compare_lists(expected_results, actual_results)
+            return self.compare_lists(expected_results, actual_results)
         else:
             if expected_results != actual_results:
                 return [f"Value mismatch: expected '{expected_results}', "

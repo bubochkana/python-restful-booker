@@ -12,37 +12,37 @@ class UserAddressGeoModel(BaseModel):
 class UserAddressModel(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
-    street: str
-    suite: str
-    city: str
+    street: str = Field(alias = "street")
+    suite: str = Field(alias = "suite")
+    city: str = Field(alias = "city")
     zipcode: str = Field(alias = "zipCode")
-    geo: UserAddressGeoModel
+    geo: UserAddressGeoModel = Field(alias = "geo")
 
 class UserCompanyModel(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
-    name: str
-    catchPhrase: str
-    bs: str
+    name: str = Field(alias = "name")
+    catchPhrase: str = Field(alias = "catchPhrase")
+    bs: str = Field(alias = "bs")
 
 class UserModel(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
-    id: int = None
-    name: str
-    email: str
-    address: UserAddressModel
-    phone: str
-    website: str
-    company: UserCompanyModel
+    id: int = Field(alias = "id", default=None)
+    name: str = Field(alias = "name")
+    email: str = Field(alias = "email")
+    address: UserAddressModel = Field(alias = "address")
+    phone: str = Field(alias = "phone")
+    website: str = Field(alias = "website")
+    company: UserCompanyModel = Field(alias = "company")
 
 class UserListingModel(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
-    userId: int
-    id: int
-    title: str
-    body: str
+    userId: int = Field(alias = "userId")
+    id: int = Field(alias = "id")
+    title: str = Field(alias = "title")
+    body: str = Field(alias = "body")
 
 class UsersListingModel(RootModel[List[UserListingModel]]):
     pass

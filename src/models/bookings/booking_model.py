@@ -27,4 +27,4 @@ class CreateBookingResponse(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
     bookingid: int = Field(alias = "bookingId")
-    booking: BookingModel
+    booking: BookingModel = Field(alias = "booking")

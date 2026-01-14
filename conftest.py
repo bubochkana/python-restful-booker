@@ -1,4 +1,3 @@
-from src.common.common_paths import CommonPaths
 from src.utils.env_loader import EnvLoader
 
 
@@ -16,6 +15,7 @@ def pytest_addoption(parser):
 
 def pytest_configure(config):
     """Pytest function: pytest_configure.
-    Used to set configuration before all tests."""
+    Used to set configuration before all tests.
+    """
     testing_env = config.getoption("env")
     EnvLoader(test_env=testing_env)

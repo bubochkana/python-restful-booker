@@ -10,7 +10,8 @@ EnvName = Literal["dev", "qa"]
 
 class EnvLoader(metaclass=SingletonMeta):
     """Singleton that loads env_configs.yaml once
-    and issues the selected env config."""
+    and issues the selected env config.
+    """
     def __init__(self, test_env: EnvName = "qa"):
         self._test_env: EnvName = test_env
 

@@ -1,6 +1,6 @@
 from typing import List
 
-from pydantic import BaseModel, RootModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, RootModel
 
 
 class PostModel(BaseModel):

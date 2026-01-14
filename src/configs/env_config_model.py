@@ -1,5 +1,5 @@
-from pydantic_settings import BaseSettings
 import yaml
+from pydantic_settings import BaseSettings
 
 from src.configs.booking_config_model import BookingEnvironmentConfig
 from src.configs.jsonplaceholder_config_model import JsonPlaceholderEnvironmentConfig

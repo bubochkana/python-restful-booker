@@ -1,10 +1,10 @@
 import random
+
 import requests
 from faker import Faker
 from requests import Response
 
-from src.models.bookings.booking_model import BookingModel, BookingDatesModel, \
-    BookingIdModel
+from src.models.bookings.booking_model import BookingDatesModel, BookingIdModel, BookingModel
 
 
 class BookingEndpoint:

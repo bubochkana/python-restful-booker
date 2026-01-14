@@ -1,11 +1,10 @@
-[project]
+[tool.poetry]
 name = "python-restful-booker"
 version = "0.1.0"
 description = ""
-authors = [
-    {name = "Anna Voitiuk"}
-]
+authors = ["Anna Voitiuk"]
 package-mode = false
+readme = "README.md"
 
 [tool.poetry.dependencies]
 pytest = "^9.0.2"
@@ -16,11 +15,8 @@ flake8 = "^7.3.0"
 faker = "^38.2.0"
 pyyaml = "^6.0.3"
 pydantic-settings = "^2.12.0"
-ruff = "^ruff-0.14.10"
-#pyyaml = "^6.0.3"
+ruff = "^0.14.10"
 
-
-readme = "README.md"
 requires-python = ">=3.13"
 
 [build-system]

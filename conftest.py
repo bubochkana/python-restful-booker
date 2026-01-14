@@ -1,26 +1,21 @@
-import pytest
-
-from src.clients.booking.booking_client import BookingClient
-from src.clients.json_placeholder.comments_client import CommentsClient
-from src.clients.json_placeholder.posts_client import PostsClient
-from src.helpers.booking_helper import BookingHelper
+from src.common.common_paths import CommonPaths
+from src.utils.env_loader import EnvLoader
 
 
-@pytest.fixture
-def booking_client():
-    return BookingClient()
+def pytest_addoption(parser):
+    """Add options to the parser.
+
+    :param parser: The parser.
+    :return: None
+    """
+    parser.addoption("--env",
+                     action="store",
+                     default="qa",
+                     help="Environment name")
 
 
-@pytest.fixture
-def booking_helper():
-    return BookingHelper()
-
-
-@pytest.fixture
-def posts_client():
-    return PostsClient()
-
-
-@pytest.fixture
-def comments_client():
-    return CommentsClient()
+def pytest_configure(config):
+    """Pytest function: pytest_configure.
+    Used to set configuration before all tests."""
+    testing_env = config.getoption("env")
+    EnvLoader(test_env=testing_env)

@@ -1,4 +1,9 @@
+"""Common filesystem path utilities.
 
+This module provides reusable helpers for resolving project-level paths,
+such as the project root directory and environment-specific configuration
+file locations.
+"""
 
 from pathlib import Path
 from typing import Literal

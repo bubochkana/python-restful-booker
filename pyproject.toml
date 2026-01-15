@@ -29,7 +29,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.ruff]
 builtins = ["_"]
 line-length = 120
-exclude = [
+extend-exclude = [
     "tests",
     "src/helpers"
 ]

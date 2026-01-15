@@ -1,35 +1,14 @@
-"""Booking endpoint client.
-
-This module provides an API client for interacting with booking-related
-endpoints, including creating, retrieving, updating, and deleting
-bookings, as well as generating random booking test data.
-"""
-
 import random
-
 import requests
 from faker import Faker
 from requests import Response
 
-from src.models.bookings.booking_model import BookingDatesModel, BookingIdModel, BookingModel
+from src.models.bookings.booking_model import BookingModel, BookingDatesModel, \
+    BookingIdModel
 
 
 class BookingEndpoint:
-    """Client for booking-related API operations.
-
-    This class encapsulates HTTP interactions with the booking service,
-    including CRUD operations and helper methods for generating
-    booking-related test data.
-    """
-
     def __init__(self, host: str, auth_endpoint=None):
-        """Initialize the BookingEndpoint.
-
-        Args:
-            host: Base URL of the booking service.
-            auth_endpoint: Authentication endpoint used to retrieve
-                authorization tokens for protected operations.
-        """
         self.host = host
         self.auth_endpoint = auth_endpoint
 
@@ -40,108 +19,65 @@ class BookingEndpoint:
         checkin: str = None,
         checkout: str = None,
     ) -> Response:
-        """Retrieve all bookings with optional filtering.
+        params = {
+            "firstName": firstName,
+            "lastName": lastName,
+            "checkin": checkin,
+            "checkout": checkout}
 
-        Args:
-            firstName: Filter bookings by first name.
-            lastName: Filter bookings by last name.
-            checkin: Filter bookings by check-in date (YYYY-MM-DD).
-            checkout: Filter bookings by checkout date (YYYY-MM-DD).
-
-        Returns:
-            Response: HTTP response containing a list of booking IDs.
-        """
-        params = {"firstName": firstName, "lastName": lastName, "checkin": checkin, "checkout": checkout}
-
-        params = {key: value for key, value in params.items() if value is not None}
+        params = {key: value for key, value in params.items()
+                  if value is not None}
 
         return requests.get(f"{self.host}/booking", params=params)
 
     def get_booking_by_id(self, booking_id) -> Response:
-        """Retrieve a booking by its identifier.
-
-        Args:
-            booking_id: Unique identifier of the booking.
-
-        Returns:
-            Response: HTTP response containing booking details.
-        """
         return requests.get(f"{self.host}/booking/{booking_id}")
 
     def create_booking(self, body: BookingModel) -> Response:
-        """Create a new booking.
+        return requests.post(
+            f"{self.host}/booking", json=body.model_dump())
 
-        Args:
-            body: Booking model containing booking details.
-
-        Returns:
-            Response: HTTP response containing created booking information.
-        """
-        return requests.post(f"{self.host}/booking", json=body.model_dump())
-
-    def update_booking(self, booking_id, body, headers=None) -> Response:
-        """Update an existing booking.
-
-        Args:
-            booking_id: Unique identifier of the booking.
-            body: The booking model to user for update.
-            headers: Optional custom HTTP headers. If not provided,
-                the default authorization headers will be used.
-
-        Returns:
-            Response: HTTP response containing updated booking information.
-        """
+    def update_booking(self, booking_id, body, headers = None) -> Response:
         token = self.auth_endpoint.get_token()
-        default_headers = {"Content-Type": "application/json", "Accept": "application/json", "Cookie": f"token={token}"}
+        default_headers = {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "Cookie": f"token={token}"
+        }
 
         final_headers = default_headers if headers is None else headers
 
-        return requests.put(f"{self.host}/booking/{booking_id}", json=body.model_dump(), headers=final_headers)
+        return requests.put(
+            f"{self.host}/booking/{booking_id}",
+            json=body.model_dump(),
+            headers=final_headers)
 
-    def delete_booking(self, booking_id, headers=None) -> Response:
-        """Delete a booking.
-
-        Args:
-            booking_id: Unique identifier of the booking.
-            headers: Optional custom HTTP headers. If not provided,
-                the default authorization headers will be used.
-
-        Returns:
-            Response: HTTP response indicating deletion status.
-        """
+    def delete_booking(self, booking_id, headers = None) -> Response:
         token = self.auth_endpoint.get_token()
-        default_headers = {"Content-Type": "application/json", "Cookie": f"token={token}"}
+        default_headers = {
+            "Content-Type": "application/json",
+            "Cookie": f"token={token}"
+        }
 
         final_headers = default_headers if headers is None else headers
 
-        return requests.delete(f"{self.host}/booking/{booking_id}", headers=final_headers)
+        return requests.delete(
+            f"{self.host}/booking/{booking_id}", headers = final_headers)
 
     def build_random_booking(self) -> BookingModel:
-        """Build a random booking model for testing purposes.
-
-        Uses Faker to generate realistic random booking data.
-
-        Returns:
-            BookingModel: Randomly generated booking model.
-        """
         faker: Faker = Faker()
-        return BookingModel(
-            firstName=faker.first_name(),
-            lastName=faker.last_name(),
-            totalPrice=faker.random_int(min=1, max=500),
-            depositPaid=faker.boolean(),
-            bookingDates=BookingDatesModel(
-                checkIn=faker.date(pattern="%Y-%m-%d"), checkOut=faker.date(pattern="%Y-%m-%d")
-            ),
-            additionalNeeds=faker.name(),
-        )
+        return BookingModel(firstName=faker.first_name(),
+                            lastName=faker.last_name(),
+                            totalPrice=faker.random_int(min=1, max=500),
+                            depositPaid=faker.boolean(),
+                            bookingDates=BookingDatesModel(
+                                checkIn=faker.date(pattern="%Y-%m-%d"),
+                                checkOut=faker.date(pattern="%Y-%m-%d")),
+                            additionalNeeds=faker.name())
 
     def pick_random_booking_id(self) -> str:
-        """Pick a random booking ID from existing bookings.
-
-        Returns:
-            str: Randomly selected booking identifier.
-        """
-        booking_ids_list = self.get_all_bookings()
-        my_obj_list: list[BookingIdModel] = [BookingIdModel(**dict_item) for dict_item in booking_ids_list.json()]
+        booking_ids_list = (self.get_all_bookings())
+        my_obj_list: list[BookingIdModel] = [BookingIdModel(**dict_item)
+                                             for dict_item
+                                             in booking_ids_list.json()]
         return str(random.choice(my_obj_list).bookingid)

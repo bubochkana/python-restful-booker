@@ -1,1 +1,0 @@
-"""Pydantic models for Booking service representing API request and response data."""

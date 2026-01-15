@@ -1,1 +1,0 @@
-"""Pydantic models for /users endpoint of the Booking service representing API request and response data."""

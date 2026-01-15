@@ -1,14 +1,43 @@
+"""Model comparison utilities.
+
+This module provides a utility class for comparing complex data structures,
+including dictionaries, lists, and primitive values, and reporting
+human-readable differences between expected and actual results.
+"""
 from typing import Dict, Any, List
 
 
 class CompareModel:
+    """Model comparison utilities.
+
+    This module provides a utility class for comparing complex data structures,
+    including dictionaries, lists, and primitive values, and reporting
+    human-readable differences between expected and actual results.
+    """
     def __init__(self):
+        """Utility class for comparing structured data models.
+
+    This class compares dictionaries, lists, and primitive values and
+    accumulates comparison results describing any mismatches found.
+    """
         ignore_order = False
         self.comparison_results: List[str] = []
 
     def compare_dicts(self, expected_results: Dict[str, Any],
-                      actual_results: Dict[str, Any]):
-        """Compare two dictionaries and return a list of differences."""
+                      actual_results: Dict[str, Any]) -> List[str]:
+        """Compare two dictionaries and record differences.
+
+        Recursively compares dictionary keys and values, including nested
+        dictionaries and lists, and records any missing keys or mismatched
+        values.
+
+        Args:
+            expected_results: Dictionary containing expected values.
+            actual_results: Dictionary containing actual values.
+
+        Returns:
+            List[str]: List of human-readable differences found during comparison.
+        """
         for key, value in expected_results.items():
             if key not in actual_results:
                 self.comparison_results.append(
@@ -31,8 +60,19 @@ class CompareModel:
         return self.comparison_results
 
     def compare_lists(self, expected_results: List[Any],
-                      actual_results: List[Any]):
-        """Compare two lists and return a list of differences."""
+                      actual_results: List[Any]) -> List[str]:
+        """Compare two lists and record differences.
+
+        Compares list elements by index, including nested dictionaries
+        and lists, and records missing indices or mismatched values.
+
+        Args:
+            expected_results: List containing expected values.
+            actual_results: List containing actual values.
+
+        Returns:
+            List[str]: List of human-readable differences found during comparison.
+        """
         for index, expected_value in enumerate(expected_results):
             if index >= len(actual_results):
                 (self.comparison_results
@@ -55,8 +95,21 @@ class CompareModel:
 
         return self.comparison_results
 
-    def compare_values(self, expected_results: Any, actual_results: Any):
-        """Compare two values and return a list of differences."""
+    def compare_values(self, expected_results: Any, actual_results: Any) -> List[str]:
+        """Compare two values and return differences.
+
+        Determines the type of values provided and delegates comparison
+        to the appropriate method for dictionaries, lists, or primitive
+        values.
+
+        Args:
+            expected_results: Expected value or data structure.
+            actual_results: Actual value or data structure.
+
+        Returns:
+            List[str]: List of human-readable differences, or an empty list
+            if values are equal.
+        """
         self.comparison_results = []
 
         if (isinstance(expected_results, dict)

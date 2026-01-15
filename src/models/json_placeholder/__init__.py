@@ -1,0 +1,1 @@
+"""Pydantic models for JsonPlaceholder service representing API request and response data."""

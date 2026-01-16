@@ -1,9 +1,9 @@
 import requests
 from assertpy import assert_that
 from faker import Faker
+from src.models.bookings.booking_id_model import BookingIdModel
 
 from src.clients.booking_client import BookingClient
-from src.models.bookings.booking_id_model import BookingIdModel
 
 
 class TestBookings:
@@ -26,21 +26,14 @@ class TestBookings:
         client = BookingClient()
         booking_endpoint = client.booking_endpoint()
 
-        response = booking_endpoint.get_all_bookings(
-            firstName="John", lastName="Smith")
+        response = booking_endpoint.get_all_bookings(firstName="John", lastName="Smith")
         assert_that(response.json()).is_not_empty()
 
     def generate_checkin_checkout_dates(self):
         faker = Faker()
-        checkin_date = faker.date_between(
-            start_date = "-7y",
-            end_date = "today"
-        )
+        checkin_date = faker.date_between(start_date="-7y", end_date="today")
 
-        checkout_date = faker.date_between(
-            start_date = checkin_date,
-            end_date = "+1y"
-        )
+        checkout_date = faker.date_between(start_date=checkin_date, end_date="+1y")
 
         checkin = checkin_date.strftime("%Y-%m-%d")
         checkout = checkout_date.strftime("%Y-%m-%d")
@@ -53,7 +46,5 @@ class TestBookings:
 
         checkin, checkout = self.generate_checkin_checkout_dates()
 
-        response = booking_endpoint.get_all_bookings(
-            checkin=checkin,
-            checkout=checkout)
+        response = booking_endpoint.get_all_bookings(checkin=checkin, checkout=checkout)
         assert_that(response.json()).is_not_empty()

@@ -16,7 +16,7 @@ Enable pre-commit configuration:
    - macOS/Linux: copy /pre-commit/windows/pre-commit .git/hooks
 2. Execute the command to grand the permission to the pre-commit file:
    - chmod +x .git/hooks/pre-commit
-3. Check the permission  are properly assigned - the result should be -rwxr-xr-x):
+3. Check the permission  are properly assigned - the result should be -rwxr-xr-x:
    -  ls -l .git/hooks/pre-commit
 4. Install hook dependencies:
    - poetry run pre-commit install --install-hooks

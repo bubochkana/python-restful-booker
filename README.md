@@ -1,9 +1,22 @@
-1. Install Python
-2. Install Git
-3. Install PyCharm
-4. Download the project from git https://github.com/bubochkana/python-restful-booker
-5. Install all dependencies with poetry
-6. Execute chmod +x .git/hooks/pre-commit
-7. Check the permission  are properly assigned -  ls -l .git/hooks/pre-commit (the result should be -rwxr-xr-x)
-8. Install poetry - poetry install --with dev
-9. Install hook dependencies - poetry run pre-commit install --install-hooks
+Prerequisites:
+1. Python should be installed (python = ">=3.10,<3.13.5")
+2. Git should be installed 
+3. PyCharm should be installed
+
+Instructions:
+1. Clone the project:
+   - git clone https://github.com/bubochkana/python-restful-booker
+   - cd python-restful-booker
+2. Install all dependencies with poetry:
+   - poetry install --with dev
+
+Enable pre-commit configuration:
+1. Copy pre-commit configuration file to the .git/hooks:
+   - Windows: copy /pre-commit/windows/pre-commit .git/hooks
+   - macOS/Linux: copy /pre-commit/windows/pre-commit .git/hooks
+2. Execute the command to grand the permission to the pre-commit file:
+   - chmod +x .git/hooks/pre-commit
+3. Check the permission  are properly assigned - the result should be -rwxr-xr-x):
+   -  ls -l .git/hooks/pre-commit
+4. Install hook dependencies:
+   - poetry run pre-commit install --install-hooks

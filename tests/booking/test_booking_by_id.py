@@ -1,5 +1,5 @@
-from assertpy import assert_that
 import requests
+from assertpy import assert_that
 
 from src.clients.booking_client import BookingClient
 from src.models.bookings.booking_model import BookingModel
@@ -10,8 +10,7 @@ class TestBookingById:
         client = BookingClient()
         booking_endpoint = client.booking_endpoint()
 
-        response = booking_endpoint.get_booking_by_id(
-            booking_endpoint.pick_random_booking_id())
+        response = booking_endpoint.get_booking_by_id(booking_endpoint.pick_random_booking_id())
 
         BookingModel.model_validate(response.json())
 
@@ -27,7 +26,6 @@ class TestBookingById:
         assert_that(booking_model).contains_key("lastname")
         assert_that(booking_model).contains_key("totalprice")
         assert_that(booking_model).contains_key("depositpaid")
-        assert_that(booking_model['bookingdates']).contains_key("checkin")
-        assert_that(booking_model['bookingdates']).contains_key("checkout")
+        assert_that(booking_model["bookingdates"]).contains_key("checkin")
+        assert_that(booking_model["bookingdates"]).contains_key("checkout")
         assert_that(booking_model).contains_key("additionalneeds")
-

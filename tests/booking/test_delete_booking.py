@@ -9,8 +9,7 @@ class TestDeleteBooking:
         client = BookingClient()
         booking_endpoint = client.booking_endpoint()
 
-        booking_id = booking_endpoint.create_booking(
-            booking_endpoint.build_random_booking()).json()['bookingid']
+        booking_id = booking_endpoint.create_booking(booking_endpoint.build_random_booking()).json()["bookingid"]
         response = booking_endpoint.delete_booking(booking_id)
 
         assert_that(response.status_code).is_equal_to(requests.codes.created)
@@ -19,8 +18,7 @@ class TestDeleteBooking:
         client = BookingClient()
         booking_endpoint = client.booking_endpoint()
 
-        response = booking_endpoint.delete_booking(
-            booking_endpoint.pick_random_booking_id(), {})
+        response = booking_endpoint.delete_booking(booking_endpoint.pick_random_booking_id(), {})
         assert_that(response.status_code).is_equal_to(requests.codes.forbidden)
 
     def test_delete_booking_no_auth_header(self):
@@ -28,16 +26,15 @@ class TestDeleteBooking:
         booking_endpoint = client.booking_endpoint()
 
         response = booking_endpoint.delete_booking(
-            booking_endpoint.pick_random_booking_id(),
-            headers={"Content-Type": "application/json"})
+            booking_endpoint.pick_random_booking_id(), headers={"Content-Type": "application/json"}
+        )
         assert_that(response.status_code).is_equal_to(requests.codes.forbidden)
 
     def test_delete_the_same_booking_twice(self):
         client = BookingClient()
         booking_endpoint = client.booking_endpoint()
 
-        booking_id = booking_endpoint.create_booking(
-            booking_endpoint.build_random_booking()).json()['bookingid']
+        booking_id = booking_endpoint.create_booking(booking_endpoint.build_random_booking()).json()["bookingid"]
 
         response = booking_endpoint.delete_booking(booking_id)
         # the actual response is 201, probably a defect
@@ -45,5 +42,4 @@ class TestDeleteBooking:
 
         response = booking_endpoint.delete_booking(booking_id)
         # the actual response is 405, probably a defect
-        (assert_that(response.status_code)
-         .is_equal_to(requests.codes.not_found))
+        (assert_that(response.status_code).is_equal_to(requests.codes.not_found))

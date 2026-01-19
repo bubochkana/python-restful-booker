@@ -24,12 +24,12 @@ class TestJsonPlaceholderCommentsE2E:
 
         # add a comment to a post
         comment_request_body = comments_endpoint.build_random_comment()
-        comment_response_body = (comments_endpoint.create_comment_for_post(
-            body=comment_request_body, post_id=created_post_id))
+        comment_response_body = comments_endpoint.create_comment_for_post(
+            body=comment_request_body, post_id=created_post_id
+        )
         created_comment_model = CommentModel(**comment_response_body.json())
         created_comment_id = created_comment_model.id
-        comment_get_response = (comments_endpoint.get_comment(
-            comment_id=created_comment_id))
+        comment_get_response = comments_endpoint.get_comment(comment_id=created_comment_id)
         assert_that(comment_get_response.status_code).is_equal_to(requests.codes.ok)
 
         # In reality, the comment and post instances are not created,
@@ -85,12 +85,12 @@ class TestJsonPlaceholderCommentsE2E:
 
         # add a comment to a post
         comment_request_body = comments_endpoint.build_random_comment()
-        comment_response_body = (comments_endpoint.create_comment_for_post(
-            body=comment_request_body, post_id=created_post_id))
+        comment_response_body = comments_endpoint.create_comment_for_post(
+            body=comment_request_body, post_id=created_post_id
+        )
         created_comment_model = CommentModel(**comment_response_body.json())
         created_comment_id = created_comment_model.id
-        comment_get_response = (comments_endpoint.get_comment(
-            comment_id=created_comment_id))
+        comment_get_response = comments_endpoint.get_comment(comment_id=created_comment_id)
         assert_that(comment_get_response.status_code).is_equal_to(requests.codes.ok)
 
         # In reality, the comment and post instances are not created,
@@ -104,7 +104,3 @@ class TestJsonPlaceholderCommentsE2E:
         # assert there is no comment
         comment_get_response = comments_endpoint.get_comment(created_comment_id)
         assert_that(comment_get_response.status_code).is_equal_to(requests.codes.not_found)
-
-
-
-

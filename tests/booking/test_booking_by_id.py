@@ -1,7 +1,7 @@
 import requests
 from assertpy import assert_that
 
-from src.clients.booking_client import BookingClient
+from src.clients.booking.booking_client import BookingClient
 from src.models.bookings.booking_model import BookingModel
 
 

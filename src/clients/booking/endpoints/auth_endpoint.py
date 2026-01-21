@@ -3,11 +3,10 @@
 This module provides an endpoint wrapper responsible for authenticating
 against the booking service and retrieving an authorization token.
 """
+from src.clients.common.base_endpoint import AbstractionEndpoint
 
-import requests
 
-
-class AuthEndpoint:
+class AuthEndpoint(AbstractionEndpoint):
     """Authentication endpoint client.
 
     This class handles authentication requests to the booking service
@@ -22,6 +21,8 @@ class AuthEndpoint:
             username: Username used for authentication.
             password: Password used for authentication.
         """
+        super().__init__()
+
         self.host = host
         self.username = username
         self.password = password
@@ -37,5 +38,5 @@ class AuthEndpoint:
         """
         headers = {"Content-Type": "application/json"}
         body = {"username": self.username, "password": self.password}
-        response = requests.post(f"{self.host}/auth", json=body, headers=headers)
+        response = self.post(f"{self.host}/auth", json=body, headers=headers)
         return response.json()["token"]

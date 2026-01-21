@@ -1,7 +1,7 @@
 import requests
 from assertpy import assert_that
 
-from src.clients.json_placeholder_client import JsonPlaceholderClient
+from src.clients.json_placeholder.json_placeholder_client import JsonPlaceholderClient
 from src.models.json_placeholder.comments.comment_model import CommentModel, CommentsListingModel
 from src.models.json_placeholder.posts.post_model import PostModel
 

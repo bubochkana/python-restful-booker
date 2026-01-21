@@ -4,7 +4,10 @@ This module defines custom pytest hooks for extending command-line
 options and initializing environment-specific configuration before
 test execution.
 """
+import yaml
 
+from src.common.common_paths import CommonPaths
+from src.common.logging_manager import LoggingManager
 from src.utils.env_loader import EnvLoader
 
 
@@ -30,5 +33,9 @@ def pytest_configure(config):
     Args:
         config: Pytest configuration object.
     """
+    with open(CommonPaths.log_config_file_path(), "r") as logs_config_file:
+        logs_config = yaml.safe_load(logs_config_file)
+    LoggingManager.init_logger(logs_config)
+
     testing_env = config.getoption("env")
     EnvLoader(test_env=testing_env)

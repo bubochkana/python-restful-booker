@@ -7,14 +7,14 @@ bookings, as well as generating random booking test data.
 
 import random
 
-import requests
 from faker import Faker
 from requests import Response
 
+from src.clients.common.base_endpoint import AbstractionEndpoint
 from src.models.bookings.booking_model import BookingDatesModel, BookingIdModel, BookingModel
 
 
-class BookingEndpoint:
+class BookingEndpoint(AbstractionEndpoint):
     """Client for booking-related API operations.
 
     This class encapsulates HTTP interactions with the booking service,
@@ -30,6 +30,8 @@ class BookingEndpoint:
             auth_endpoint: Authentication endpoint used to retrieve
                 authorization tokens for protected operations.
         """
+        super().__init__()
+
         self.host = host
         self.auth_endpoint = auth_endpoint
 
@@ -55,7 +57,7 @@ class BookingEndpoint:
 
         params = {key: value for key, value in params.items() if value is not None}
 
-        return requests.get(f"{self.host}/booking", params=params)
+        return self.get(f"{self.host}/booking", params=params)
 
     def get_booking_by_id(self, booking_id) -> Response:
         """Retrieve a booking by its identifier.
@@ -66,7 +68,7 @@ class BookingEndpoint:
         Returns:
             Response: HTTP response containing booking details.
         """
-        return requests.get(f"{self.host}/booking/{booking_id}")
+        return self.get(f"{self.host}/booking/{booking_id}")
 
     def create_booking(self, body: BookingModel) -> Response:
         """Create a new booking.
@@ -77,7 +79,7 @@ class BookingEndpoint:
         Returns:
             Response: HTTP response containing created booking information.
         """
-        return requests.post(f"{self.host}/booking", json=body.model_dump())
+        return self.post(f"{self.host}/booking", json=body.model_dump())
 
     def update_booking(self, booking_id, body, headers=None) -> Response:
         """Update an existing booking.
@@ -96,7 +98,7 @@ class BookingEndpoint:
 
         final_headers = default_headers if headers is None else headers
 
-        return requests.put(f"{self.host}/booking/{booking_id}", json=body.model_dump(), headers=final_headers)
+        return self.put(f"{self.host}/booking/{booking_id}", json=body.model_dump(), headers=final_headers)
 
     def delete_booking(self, booking_id, headers=None) -> Response:
         """Delete a booking.
@@ -114,7 +116,7 @@ class BookingEndpoint:
 
         final_headers = default_headers if headers is None else headers
 
-        return requests.delete(f"{self.host}/booking/{booking_id}", headers=final_headers)
+        return self.delete(f"{self.host}/booking/{booking_id}", headers=final_headers)
 
     def build_random_booking(self) -> BookingModel:
         """Build a random booking model for testing purposes.

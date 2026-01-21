@@ -3,13 +3,12 @@
 This module provides a client facade for accessing JsonPlaceholder-related API
 endpoints.
 """
+from src.clients.common.base_client import AbstractionClient
+from src.clients.json_placeholder.endpoints.comments_endpoint import CommentsEndpoint
+from src.clients.json_placeholder.endpoints.posts_endpoint import PostsEndpoint
 
-from src.endpoints.json_placeholder.comments_endpoint import CommentsEndpoint
-from src.endpoints.json_placeholder.posts_endpoint import PostsEndpoint
-from src.utils.env_loader import EnvLoader
 
-
-class JsonPlaceholderClient:
+class JsonPlaceholderClient(AbstractionClient):
     """Client facade for JsonPlaceholder-related API endpoints.
 
     This class acts as an entry point for interacting with the JsonPlaceholder system.
@@ -21,7 +20,7 @@ class JsonPlaceholderClient:
 
         Loads JsonPlaceholder configuration from the environment.
         """
-        self.config = EnvLoader().json_placeholder_config
+        super().__init__(client_config="json_placeholder_config")
 
     def posts_endpoint(self) -> PostsEndpoint:
         """Return the Posts endpoint.

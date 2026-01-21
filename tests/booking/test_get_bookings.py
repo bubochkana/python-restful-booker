@@ -1,9 +1,9 @@
 import requests
 from assertpy import assert_that
 from faker import Faker
-from src.models.bookings.booking_id_model import BookingIdModel
 
-from src.clients.booking_client import BookingClient
+from src.clients.booking.booking_client import BookingClient
+from src.models.bookings.booking_model import BookingIdModel
 
 
 class TestBookings:

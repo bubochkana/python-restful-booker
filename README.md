@@ -20,3 +20,13 @@ Enable pre-commit configuration:
    -  ls -l .git/hooks/pre-commit
 4. Install hook dependencies:
    - poetry run pre-commit install --install-hooks
+
+Hints:
+1. To install a new lib, execute the command below. This will add colorlog as a dependency to your pyproject.toml file and update your poetry.lock file. :
+   - poetry add <lib_name>
+2. To run ruff checks execute the command:
+   - poetry run ruff check .
+3. To run ruff checks and fix the formatting within the check running (indentation, line length, etc.) execute the command:
+   - poetry run ruff check . --fix
+4. To manually update the poetry.lock file execute the command:
+   - poetry lock

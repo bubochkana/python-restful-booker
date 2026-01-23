@@ -126,13 +126,14 @@ class AbstractionEndpoint:
         include in logs.
         """
         if body is None or body == "":
-            return "empty body"
+            return ""
 
         if isinstance(body, (dict, list)):
             try:
                 return json.dumps(body, indent=4)
-            except Exception:
-                return str(body)
+            except (TypeError, ValueError) as e:
+                self.logger.debug("Failed to serialize", e)
+                return ""
         return str(body)
 
     def request(self, method, url, expected_status_code=None, *args, **kwargs):

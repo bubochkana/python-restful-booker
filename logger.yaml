@@ -1,7 +1,7 @@
 version: 1
-#filters:
-#  sensitive_data_filter:
-#    (): src.common.sensitive_data_filter.SensitiveDataFilter
+filters:
+  sensitive_data_filter:
+    (): src.common.sensitive_data_filter.SensitiveDataFilter
 disable_existing_loggers: false
 loggers:
   '':
@@ -23,7 +23,7 @@ handlers:
     class: logging.StreamHandler
     formatter: colored_console
     stream: ext://sys.stdout
-#    filters: [sensitive_data_filter]
+    filters: [sensitive_data_filter]
   file:
     level: DEBUG
     class: logging.handlers.RotatingFileHandler

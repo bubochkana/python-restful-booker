@@ -1,6 +1,7 @@
 import requests
 from assertpy import assert_that
 
+from src.actions.json_placeholder_actions import JsonPlaceholderActions
 from src.clients.json_placeholder.json_placeholder_client import JsonPlaceholderClient
 from src.models.json_placeholder.posts.post_model import PostModel
 
@@ -25,7 +26,7 @@ class TestPosts:
         client = JsonPlaceholderClient()
         posts_endpoint = client.posts_endpoint()
 
-        random_post_id = posts_endpoint.pick_random_post_id()
+        random_post_id = JsonPlaceholderActions().pick_random_post_id()
         response = posts_endpoint.get_post_by_id(random_post_id)
 
         PostModel.model_validate(response.json())

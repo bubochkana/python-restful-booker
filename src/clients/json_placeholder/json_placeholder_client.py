@@ -6,6 +6,7 @@ endpoints.
 from src.clients.common.base_client import AbstractionClient
 from src.clients.json_placeholder.endpoints.comments_endpoint import CommentsEndpoint
 from src.clients.json_placeholder.endpoints.posts_endpoint import PostsEndpoint
+from src.clients.json_placeholder.endpoints.users_endpoint import UsersEndpoint
 
 
 class JsonPlaceholderClient(AbstractionClient):
@@ -37,3 +38,11 @@ class JsonPlaceholderClient(AbstractionClient):
             CommentsEndpoint: An initialized comments endpoint instance.
         """
         return CommentsEndpoint(self.config.host)
+
+    def users_endpoint(self) -> UsersEndpoint:
+        """Return the Users endpoint.
+
+        Returns:
+            UsersEndpoint: An initialized users endpoint instance.
+        """
+        return UsersEndpoint(self.config.host)

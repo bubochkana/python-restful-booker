@@ -5,9 +5,7 @@ endpoints of the JsonPlaceholder service, including retrieving, creating,
 deleting comments, and generating random comment test data.
 """
 
-import random
 
-from faker import Faker
 from requests import Response
 
 from src.clients.common.base_endpoint import AbstractionEndpoint
@@ -78,30 +76,4 @@ class CommentsEndpoint(AbstractionEndpoint):
         """
         return self.delete(f"{self.host}/comments/{post_id}")
 
-    def pick_random_comment_id_for_post(self, post_id) -> str:
-        """Pick a random comment ID for a given post.
 
-        Args:
-            post_id: Identifier of the post whose comments are requested.
-
-        Returns:
-            str: Randomly selected comment identifier.
-        """
-        comments_for_post_id_list = self.get_all_comments_by_post_id(post_id)
-        my_obj_list: list[CommentModel] = [CommentModel(**dict_item) for dict_item in comments_for_post_id_list.json()]
-        return str(random.choice(my_obj_list).id)
-
-    def build_random_comment(self) -> CommentModel:
-        """Build a random comment model for testing purposes.
-
-        Uses Faker to generate realistic random comment data and associates
-        the comment with a randomly selected post.
-
-        Returns:
-            CommentModel: Randomly generated comment model.
-        """
-        faker: Faker = Faker()
-        random_post_id = self.posts_endpoint.pick_random_post_id()
-        return CommentModel(
-            postId=random_post_id, name=faker.name(), email=faker.email(), body=faker.text(max_nb_chars=100)
-        )

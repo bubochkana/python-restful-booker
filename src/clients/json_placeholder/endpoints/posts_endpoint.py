@@ -5,9 +5,7 @@ endpoints of the JsonPlaceholder service, including retrieving, creating,
 updating, deleting posts, and generating random post test data.
 """
 
-import random
 
-from faker import Faker
 from requests import Response
 
 from src.clients.common.base_endpoint import AbstractionEndpoint
@@ -109,26 +107,3 @@ class PostsEndpoint(AbstractionEndpoint):
             Response: HTTP response containing partially updated post information.
         """
         return self.patch(f"{self.host}/posts/{post_id}", json=body)
-
-    def pick_random_post_id(self) -> int:
-        """Pick a random post identifier from existing posts.
-
-        Returns:
-            int: Randomly selected post identifier.
-        """
-        posts_ids_list = self.get_all_posts()
-        my_obj_list: list[PostModel] = [PostModel(**dict_item) for dict_item in posts_ids_list.json()]
-        return random.choice(my_obj_list).id
-
-    def build_random_post(self) -> PostModel:
-        """Build a random post model for testing purposes.
-
-        Uses Faker to generate realistic random post data and associates
-        the post with a randomly selected user.
-
-        Returns:
-            PostModel: Randomly generated post model.
-        """
-        faker: Faker = Faker()
-        random_user_id = self.users_endpoint.pick_random_user_id()
-        return PostModel(title=faker.text(max_nb_chars=20), body=faker.text(max_nb_chars=100), userId=random_user_id)

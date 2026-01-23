@@ -5,13 +5,11 @@ endpoints, including creating, retrieving, updating, and deleting
 bookings, as well as generating random booking test data.
 """
 
-import random
 
-from faker import Faker
 from requests import Response
 
 from src.clients.common.base_endpoint import AbstractionEndpoint
-from src.models.bookings.booking_model import BookingDatesModel, BookingIdModel, BookingModel
+from src.models.bookings.booking_model import BookingModel
 
 
 class BookingEndpoint(AbstractionEndpoint):
@@ -118,32 +116,4 @@ class BookingEndpoint(AbstractionEndpoint):
 
         return self.delete(f"{self.host}/booking/{booking_id}", headers=final_headers)
 
-    def build_random_booking(self) -> BookingModel:
-        """Build a random booking model for testing purposes.
 
-        Uses Faker to generate realistic random booking data.
-
-        Returns:
-            BookingModel: Randomly generated booking model.
-        """
-        faker: Faker = Faker()
-        return BookingModel(
-            firstName=faker.first_name(),
-            lastName=faker.last_name(),
-            totalPrice=faker.random_int(min=1, max=500),
-            depositPaid=faker.boolean(),
-            bookingDates=BookingDatesModel(
-                checkIn=faker.date(pattern="%Y-%m-%d"), checkOut=faker.date(pattern="%Y-%m-%d")
-            ),
-            additionalNeeds=faker.name(),
-        )
-
-    def pick_random_booking_id(self) -> str:
-        """Pick a random booking ID from existing bookings.
-
-        Returns:
-            str: Randomly selected booking identifier.
-        """
-        booking_ids_list = self.get_all_bookings()
-        my_obj_list: list[BookingIdModel] = [BookingIdModel(**dict_item) for dict_item in booking_ids_list.json()]
-        return str(random.choice(my_obj_list).bookingid)

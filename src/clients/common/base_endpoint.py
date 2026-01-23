@@ -10,8 +10,6 @@ import logging.config
 import requests
 from requests import Response
 
-from src.common.sensitive_data_filter import SensitiveDataFilter
-
 
 class AbstractionEndpoint:
     """Base abstraction for HTTP endpoint clients.
@@ -108,65 +106,93 @@ class AbstractionEndpoint:
         """
         return self.request('DELETE', url, *args, **kwargs)
 
-    def request(self, method, url, expected_status_code=None, *args, **kwargs):
-        """Execute an HTTP request and log request/response details.
+    def _pretty_json_or_text(self, body) -> str:
+        """Convert a request or response body into a human-readable string.
 
-        Sends an HTTP request using the specified method, optionally
-        validates the response status code, masks sensitive data, and
-        logs formatted request and response information.
+        The return value is suitable for logging. If the body is a dictionary
+        or list, it attempts to serialize it into a pretty-printed JSON string
+        with indentation. If serialization fails, it falls back to a simple
+        string representation.
+
+        If the body is empty (``None`` or an empty string), a placeholder
+        message is returned.
 
         Args:
-            method: HTTP method to use (e.g., "GET", "POST").
-            url: Target URL for the request.
-            expected_status_code: Optional expected HTTP status code.
-                If provided and the actual status code differs, an
-                exception is raised.
-            *args: Positional arguments forwarded to ``requests.request``.
-            **kwargs: Keyword arguments forwarded to ``requests.request``.
+        body: The request or response body. Can be a dict, list, string,
+            or None.
 
         Returns:
-            Response: HTTP response returned by the request.
+        str: A formatted string representation of the body that is safe to
+        include in logs.
+        """
+        if body is None or body == "":
+            return "empty body"
+
+        if isinstance(body, (dict, list)):
+            try:
+                return json.dumps(body, indent=4)
+            except Exception:
+                return str(body)
+        return str(body)
+
+    def request(self, method, url, expected_status_code=None, *args, **kwargs):
+        """Execute an HTTP request and log request and response details.
+
+            This method sends an HTTP request using the ``requests`` library,
+            optionally validates the response status code, formats request and
+            response bodies into a human-readable form, and logs headers and
+            bodies for debugging and traceability.
+
+            Request and response bodies are safely formatted for logging:
+            - JSON objects and arrays are pretty-printed
+            - Empty bodies are handled gracefully
+            - Non-JSON content is logged as plain text
+
+        Args:
+                method: HTTP method to use (e.g. ``"GET"``, ``"POST"``, ``"PUT"``,
+                    ``"DELETE"``).
+                url: Target URL for the request.
+                expected_status_code: Optional expected HTTP status code. If
+                    provided and the actual response status code differs, an
+                    exception is raised.
+                *args: Positional arguments forwarded to ``requests.request``.
+                **kwargs: Keyword arguments forwarded to ``requests.request``
+                    (e.g. headers, params, json, data).
+
+        Returns:
+                requests.Response: The HTTP response object returned by
+                ``requests.request``.
 
         Raises:
-            Exception: If an expected status code is provided and the
-                response status code does not match.
+        Exception: If ``expected_status_code`` is provided and the actual
+        response status code does not match the expected value.
         """
         response = requests.request(method, url, *args, **kwargs)
-        if expected_status_code and response.status_code != expected_status_code:
+
+        if expected_status_code is not None and response.status_code != expected_status_code:
             raise Exception(
-                f"Expected status code {expected_status_code}, but got {response.status_code}")
+                f"Expected status code {expected_status_code}, but got {response.status_code}"
+            )
 
-        request_headers = dict(response.request.headers)
-        masked_request_headers = SensitiveDataFilter().mask_token_in_headers(request_headers)
+        request_headers = dict(response.request.headers or {})
+        response_headers = dict(response.headers or {})
 
-        if response.request.body is None:
-            formatted_request_body = ""
-            return formatted_request_body
-        else:
-            formatted_request_body = json.dumps(json.loads(response.request.body), indent=4)
-        # formatted_request_body = JsonFormatter.format_request_body(response.request.body)
+        formatted_request_body = self._pretty_json_or_text(response.request.body)
+        try:
+            response_obj = response.json()
+            formatted_response_body = self._pretty_json_or_text(response_obj)
+        except Exception:
+            formatted_response_body = self._pretty_json_or_text(response.text)
 
-        response_headers = dict(response.headers)
-        masked_response_headers = SensitiveDataFilter().mask_token_in_headers(response_headers)
-
-        response_body = dict(response.json())
-        masked_response_body = SensitiveDataFilter().mask_token_in_response(response_body)
-        formatted_response_body = json.dumps(masked_response_body, indent=4)
 
         self.logger.info(f"{method} {url} - {response.status_code}")
-
-        self.logger.debug(f"Request Headers: {masked_request_headers}")
-        # [DEBUG] Request Body: {response.request.body}  --  pretty json
-        # self.logger.debug(f"Request Body: {response.request.body}")
+        # TODO - mask sensitive information
+        self.logger.debug(f"Request Headers: {request_headers}")
+        #TODO - mask sensitive information
         self.logger.debug(f"Request Body: {formatted_request_body}")
-
-        self.logger.debug(f"`Response` Headers: {masked_response_headers}")
-        # [DEBUG] Response Body: {response.text}  -- pretty json
-        # self.logger.debug(f"Response Body: {response.text}")
-        # self.logger.debug(f"Response Body: {masked_response_body}")
+        self.logger.debug(f"`Response` Headers: {response_headers}")
+        # TODO - mask sensitive information
         self.logger.debug(f"Response Body: {formatted_response_body}")
-
         return response
-
 
 

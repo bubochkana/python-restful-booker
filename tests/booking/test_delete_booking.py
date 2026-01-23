@@ -1,6 +1,7 @@
 import requests
 from assertpy import assert_that
 
+from src.actions.booking_actions import BookingActions
 from src.clients.booking.booking_client import BookingClient
 
 
@@ -9,7 +10,7 @@ class TestDeleteBooking:
         client = BookingClient()
         booking_endpoint = client.booking_endpoint()
 
-        booking_id = booking_endpoint.create_booking(booking_endpoint.build_random_booking()).json()["bookingid"]
+        booking_id = booking_endpoint.create_booking(BookingActions().build_random_booking()).json()["bookingid"]
         response = booking_endpoint.delete_booking(booking_id)
 
         assert_that(response.status_code).is_equal_to(requests.codes.created)
@@ -18,7 +19,7 @@ class TestDeleteBooking:
         client = BookingClient()
         booking_endpoint = client.booking_endpoint()
 
-        response = booking_endpoint.delete_booking(booking_endpoint.pick_random_booking_id(), {})
+        response = booking_endpoint.delete_booking(BookingActions().pick_random_booking_id(), {})
         assert_that(response.status_code).is_equal_to(requests.codes.forbidden)
 
     def test_delete_booking_no_auth_header(self):
@@ -26,7 +27,7 @@ class TestDeleteBooking:
         booking_endpoint = client.booking_endpoint()
 
         response = booking_endpoint.delete_booking(
-            booking_endpoint.pick_random_booking_id(), headers={"Content-Type": "application/json"}
+            BookingActions().pick_random_booking_id(), headers={"Content-Type": "application/json"}
         )
         assert_that(response.status_code).is_equal_to(requests.codes.forbidden)
 
@@ -34,7 +35,7 @@ class TestDeleteBooking:
         client = BookingClient()
         booking_endpoint = client.booking_endpoint()
 
-        booking_id = booking_endpoint.create_booking(booking_endpoint.build_random_booking()).json()["bookingid"]
+        booking_id = booking_endpoint.create_booking(BookingActions().build_random_booking()).json()["bookingid"]
 
         response = booking_endpoint.delete_booking(booking_id)
         # the actual response is 201, probably a defect

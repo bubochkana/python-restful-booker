@@ -1,6 +1,7 @@
 import requests
 from assertpy import assert_that
 
+from src.actions.booking_actions import BookingActions
 from src.clients.booking.booking_client import BookingClient
 from src.models.bookings.booking_model import BookingModel
 
@@ -10,7 +11,8 @@ class TestBookingById:
         client = BookingClient()
         booking_endpoint = client.booking_endpoint()
 
-        response = booking_endpoint.get_booking_by_id(booking_endpoint.pick_random_booking_id())
+        # TODO - I moved pick_random_booking_id() method to the BookingActions class, so how to properly use the method in this test now?
+        response = booking_endpoint.get_booking_by_id(BookingActions().pick_random_booking_id())
 
         BookingModel.model_validate(response.json())
 
@@ -18,7 +20,7 @@ class TestBookingById:
         client = BookingClient()
         booking_endpoint = client.booking_endpoint()
 
-        response = booking_endpoint.get_booking_by_id(booking_endpoint.pick_random_booking_id())
+        response = booking_endpoint.get_booking_by_id(BookingActions().pick_random_booking_id())
         assert_that(response.status_code).is_equal_to(requests.codes.ok)
 
         booking_model = BookingModel.model_validate(response.json()).model_dump()

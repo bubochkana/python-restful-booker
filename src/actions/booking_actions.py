@@ -7,6 +7,7 @@ concise and focused on assertions.
 """
 import logging
 import random
+from typing import List
 
 from assertpy import assert_that
 from faker import Faker
@@ -221,3 +222,18 @@ class BookingActions:
         booking_ids_list = self.booking_endpoint.get_all_bookings()
         my_obj_list: list[BookingIdModel] = [BookingIdModel(**dict_item) for dict_item in booking_ids_list.json()]
         return str(random.choice(my_obj_list).bookingid)
+
+    def assert_comparison_results(self, comparison_results: List[str]):
+        """Assert that comparison results contain no differences.
+
+        This method verifies that the provided list of comparison results is
+        empty. If differences are present, an assertion error is raised with
+        a descriptive message containing the detected differences.
+
+        Args:
+            comparison_results: A list of strings describing differences
+                found during comparison.
+        """
+        assert_that(comparison_results,
+                    f"Following differences found: {comparison_results}").is_empty()
+

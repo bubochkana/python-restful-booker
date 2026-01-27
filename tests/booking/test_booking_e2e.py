@@ -19,7 +19,7 @@ class TestBookingE2E:
         comparison_results = CompareModel().compare_values(
             created_booking.booking.model_dump(), get_booking_response.model_dump()
         )
-        assert_that(comparison_results, f"Following differences found: {comparison_results}").is_empty()
+        actions.assert_comparison_results(comparison_results)
 
         # delete the booking
         actions.delete_booking(booking_id)
@@ -41,7 +41,7 @@ class TestBookingE2E:
         comparison_results = CompareModel().compare_values(
             created_booking.booking.model_dump(), get_booking_response.model_dump()
         )
-        assert_that(comparison_results,f"Following differences found: {comparison_results}").is_empty()
+        actions.assert_comparison_results(comparison_results)
 
         # update (patch) booking
         updated_booking = actions.update_booking(booking_id)
@@ -53,4 +53,4 @@ class TestBookingE2E:
         comparison_results = CompareModel().compare_values(
             updated_booking.model_dump(), get_booking_response.json()
         )
-        assert_that(comparison_results, f"Following differences found: {comparison_results}").is_empty()
+        actions.assert_comparison_results(comparison_results)

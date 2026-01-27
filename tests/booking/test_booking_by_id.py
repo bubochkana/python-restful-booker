@@ -11,7 +11,6 @@ class TestBookingById:
         client = BookingClient()
         booking_endpoint = client.booking_endpoint()
 
-        # TODO - I moved pick_random_booking_id() method to the BookingActions class, so how to properly use the method in this test now?
         response = booking_endpoint.get_booking_by_id(BookingActions().pick_random_booking_id())
 
         BookingModel.model_validate(response.json())

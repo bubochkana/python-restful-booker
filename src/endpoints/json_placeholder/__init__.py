@@ -1,1 +1,0 @@
-"""JsonPlaceholder service endpoint implementations."""

@@ -46,3 +46,17 @@ class CommonPaths:
         """
         filename = f"{env}_configs.yaml"
         return CommonPaths.project_root().joinpath("src").joinpath("resources").joinpath(f"{env}").joinpath(filename)
+
+    @staticmethod
+    def log_config_file_path() -> Path:
+        """Return the path to the logging configuration file.
+
+        The logging configuration file is expected to be located at the
+        project root and used to configure application-wide logging
+        behavior (e.g., console and file handlers).
+
+        Returns:
+            Path: Absolute path to the logging configuration YAML file.
+        """
+        filename = "logger.yaml"
+        return CommonPaths.project_root().joinpath(filename)

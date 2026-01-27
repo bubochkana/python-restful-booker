@@ -1,0 +1,34 @@
+version: 1
+filters:
+  sensitive_data_filter:
+    (): src.common.sensitive_data_filter.SensitiveDataFilter
+disable_existing_loggers: false
+loggers:
+  '':
+    level: 10
+    handlers:
+      - console
+      - file
+formatters:
+  standard:
+    format: "%(asctime)s - %(name)s - [%(levelname)s] -  %(filename)s:%(lineno)d - %(message)s"
+    datefmt: "%Y-%m-%dT%H:%M:%S%z"
+  colored_console:
+    class: colorlog.ColoredFormatter
+    format: "%(log_color)s%(asctime)s - %(name)s - [%(levelname)s] -  %(filename)s:%(lineno)d - %(message)s"
+    datefmt: "%Y-%m-%dT%H:%M:%S%z"
+handlers:
+  console:
+    level: DEBUG
+    class: logging.StreamHandler
+    formatter: colored_console
+    stream: ext://sys.stdout
+    filters: [sensitive_data_filter]
+  file:
+    level: DEBUG
+    class: logging.handlers.RotatingFileHandler
+    formatter: standard
+    filename: "tests.log"
+    maxBytes: 500000
+    backupCount: 5
+    filters: [sensitive_data_filter]

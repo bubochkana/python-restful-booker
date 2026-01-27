@@ -9,3 +9,7 @@ venv/
 # Other
 __pycache__
 .DS_Store
+
+#Test logs
+tests.log
+**/tests.log

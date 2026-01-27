@@ -7,26 +7,27 @@ and helping method to select a random user for testing purposes.
 
 import random
 
-import requests
 from requests import Response
 
+from src.clients.common.base_endpoint import AbstractionEndpoint
 from src.models.json_placeholder.users.user_model import UserModel
 
 
-class UsersEndpoint:
+class UsersEndpoint(AbstractionEndpoint):
     """Client for user-related API operations.
 
     This class encapsulates HTTP interactions with user endpoints and
     provides helper methods for retrieving user data and selecting
     random users for test scenarios.
     """
-
     def __init__(self, host: str):
         """Initialize the UsersEndpoint.
 
         Args:
             host: Base URL of the JsonPlaceholder service.
         """
+        super().__init__()
+
         self.host = host
 
     def get_all_users(self) -> Response:
@@ -35,7 +36,7 @@ class UsersEndpoint:
         Returns:
             Response: HTTP response containing a list of users.
         """
-        return requests.get(f"{self.host}/users")
+        return self.get(f"{self.host}/users")
 
     def pick_random_user_id(self) -> int:
         """Pick a random user identifier from existing users.

@@ -3,13 +3,12 @@
 This module provides a client facade for accessing booking-related API
 endpoints.
 """
+from src.clients.booking.endpoints.auth_endpoint import AuthEndpoint
+from src.clients.booking.endpoints.booking_endpoint import BookingEndpoint
+from src.clients.common.base_client import AbstractionClient
 
-from src.endpoints.booking.auth_endpoint import AuthEndpoint
-from src.endpoints.booking.booking_endpoint import BookingEndpoint
-from src.utils.env_loader import EnvLoader
 
-
-class BookingClient:
+class BookingClient(AbstractionClient):
     """Client facade for booking-related API endpoints.
 
     This class acts as an entry point for interacting with the booking system.
@@ -23,7 +22,7 @@ class BookingClient:
         Loads booking configuration from the environment and initializes
         the authentication endpoint using configured credentials.
         """
-        self.config = EnvLoader().booking_config
+        super().__init__(client_config="booking_config")
 
         self._auth_endpoint = AuthEndpoint(self.config.host, self.config.username, self.config.password)
 

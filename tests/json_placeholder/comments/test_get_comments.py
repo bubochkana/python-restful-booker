@@ -3,7 +3,7 @@ import random
 import requests
 from assertpy import assert_that
 
-from src.clients.json_placeholder_client import JsonPlaceholderClient
+from src.clients.json_placeholder.json_placeholder_client import JsonPlaceholderClient
 
 
 class TestPosts:

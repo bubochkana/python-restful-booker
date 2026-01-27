@@ -123,8 +123,7 @@ class BookingActions:
         comparison_results = CompareModel().compare_values(
             post_model.model_dump(), created_booking_as_model.booking.model_dump()
         )
-        assert_that(comparison_results,
-                    f"Following differences found: {comparison_results}").is_empty()
+        self.assert_comparison_results(comparison_results)
 
         logging.info("Booking created successfully!")
 
@@ -165,8 +164,7 @@ class BookingActions:
         comparison_results = CompareModel().compare_values(
             put_model.model_dump(), updated_booking_as_model.model_dump()
         )
-        assert_that(comparison_results,
-                    f"Following differences found: {comparison_results}").is_empty()
+        self.assert_comparison_results(comparison_results)
 
         logging.info("Booking updated successfully!")
 

@@ -7,6 +7,7 @@ domain models to keep test cases concise and maintainable.
 """
 import logging
 import random
+from typing import List
 
 from assertpy import assert_that
 from faker import Faker
@@ -78,8 +79,7 @@ class JsonPlaceholderActions:
         comparison_results = CompareModel().compare_values(
             post_post_model.model_dump(), created_post_as_model.booking.model_dump()
         )
-        assert_that(comparison_results,
-                    f"Following differences found: {comparison_results}").is_empty()
+        self.assert_comparison_results(comparison_results)
 
         logging.info('Post added successfully')
 
@@ -119,8 +119,7 @@ class JsonPlaceholderActions:
         comparison_results = CompareModel().compare_values(
             comment_post_model.model_dump(), created_comment_as_model.booking.model_dump()
         )
-        assert_that(comparison_results,
-                    f"Following differences found: {comparison_results}").is_empty()
+        self.assert_comparison_results(comparison_results)
 
         logging.info('Comment added successfully')
 
@@ -268,3 +267,17 @@ class JsonPlaceholderActions:
         return CommentModel(
             postId=random_post_id, name=faker.name(), email=faker.email(), body=faker.text(max_nb_chars=100)
         )
+
+    def assert_comparison_results(self, comparison_results: List[str]):
+        """Assert that comparison results contain no differences.
+
+        This method verifies that the provided list of comparison results is
+        empty. If differences are present, an assertion error is raised with
+        a descriptive message containing the detected differences.
+
+        Args:
+            comparison_results: A list of strings describing differences
+                found during comparison.
+        """
+        assert_that(comparison_results,
+                    f"Following differences found: {comparison_results}").is_empty()

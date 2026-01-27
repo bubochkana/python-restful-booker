@@ -17,7 +17,7 @@ class TestUpdateBooking:
         updated_booking = booking_endpoint.update_booking(booking_id_to_update, random_booking)
 
         comparison_results = CompareModel().compare_values(random_booking.model_dump(), updated_booking.json())
-        assert_that(comparison_results, f"Following differences found: {comparison_results}").is_empty()
+        BookingActions().assert_comparison_results(comparison_results)
 
     def test_update_booking_no_auth_header(self):
         client = BookingClient()

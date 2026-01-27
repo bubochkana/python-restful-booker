@@ -187,12 +187,9 @@ class AbstractionEndpoint:
 
 
         self.logger.info(f"{method} {url} - {response.status_code}")
-        # TODO - mask sensitive information
         self.logger.debug(f"Request Headers: {request_headers}")
-        #TODO - mask sensitive information
         self.logger.debug(f"Request Body: {formatted_request_body}")
         self.logger.debug(f"`Response` Headers: {response_headers}")
-        # TODO - mask sensitive information
         self.logger.debug(f"Response Body: {formatted_response_body}")
         return response
 

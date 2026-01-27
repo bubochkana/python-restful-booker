@@ -16,10 +16,7 @@ class TestBookingE2E:
 
         # get created booking
         get_booking_response = actions.get_booking(booking_id)
-        comparison_results = CompareModel().compare_values(
-            created_booking.booking.model_dump(), get_booking_response.model_dump()
-        )
-        actions.assert_comparison_results(comparison_results)
+        actions.assert_comparison_results(created_booking.booking.model_dump(), get_booking_response.model_dump())
 
         # delete the booking
         actions.delete_booking(booking_id)
@@ -38,10 +35,7 @@ class TestBookingE2E:
 
         # get created booking
         get_booking_response = actions.get_booking(booking_id)
-        comparison_results = CompareModel().compare_values(
-            created_booking.booking.model_dump(), get_booking_response.model_dump()
-        )
-        actions.assert_comparison_results(comparison_results)
+        actions.assert_comparison_results(created_booking.booking.model_dump(), get_booking_response.model_dump())
 
         # update (patch) booking
         updated_booking = actions.update_booking(booking_id)
@@ -50,7 +44,4 @@ class TestBookingE2E:
         get_booking_response = actions.booking_endpoint.get_booking_by_id(booking_id)
 
         # compare created and updated (patched) bookings
-        comparison_results = CompareModel().compare_values(
-            updated_booking.model_dump(), get_booking_response.json()
-        )
-        actions.assert_comparison_results(comparison_results)
+        actions.assert_comparison_results(updated_booking.model_dump(), get_booking_response.json())

@@ -7,7 +7,6 @@ concise and focused on assertions.
 """
 import logging
 import random
-from typing import List
 
 from assertpy import assert_that
 from faker import Faker
@@ -119,11 +118,7 @@ class BookingActions:
             raise Exception(f"Expected status code 200, but got {response.status_code}")
 
         created_booking_as_model = CreateBookingResponse(**response.json())
-
-        comparison_results = CompareModel().compare_values(
-            post_model.model_dump(), created_booking_as_model.booking.model_dump()
-        )
-        self.assert_comparison_results(comparison_results)
+        self.assert_comparison_results(post_model.model_dump(), created_booking_as_model.booking.model_dump())
 
         logging.info("Booking created successfully!")
 
@@ -160,11 +155,7 @@ class BookingActions:
             raise Exception(f"Expected status code 200, but got {response.status_code}")
 
         updated_booking_as_model = BookingModel(**response.json())
-
-        comparison_results = CompareModel().compare_values(
-            put_model.model_dump(), updated_booking_as_model.model_dump()
-        )
-        self.assert_comparison_results(comparison_results)
+        self.assert_comparison_results(put_model.model_dump(), updated_booking_as_model.model_dump())
 
         logging.info("Booking updated successfully!")
 
@@ -221,17 +212,22 @@ class BookingActions:
         my_obj_list: list[BookingIdModel] = [BookingIdModel(**dict_item) for dict_item in booking_ids_list.json()]
         return str(random.choice(my_obj_list).bookingid)
 
-    def assert_comparison_results(self, comparison_results: List[str]):
-        """Assert that comparison results contain no differences.
+    def assert_comparison_results(self, expected_result, actual_result):
+        """Assert that expected and actual results match.
 
-        This method verifies that the provided list of comparison results is
-        empty. If differences are present, an assertion error is raised with
-        a descriptive message containing the detected differences.
+        This method compares the expected and actual results using
+        ``CompareModel.compare_values`` and asserts that no differences are
+        found. If differences exist, an assertion error is raised with a
+        descriptive message listing the detected differences.
 
         Args:
-            comparison_results: A list of strings describing differences
-                found during comparison.
+            expected_result: The expected data structure to compare.
+            actual_result: The actual data structure to compare against the
+                expected result.
         """
+        comparison_results = CompareModel().compare_values(
+            expected_result, actual_result
+        )
         assert_that(comparison_results,
                     f"Following differences found: {comparison_results}").is_empty()
 

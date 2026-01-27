@@ -15,9 +15,7 @@ class TestCreateBooking:
         actual_result = booking_endpoint.create_booking(body)
 
         assert_that(actual_result.status_code).is_equal_to(requests.codes.ok)
-
-        comparison_results = CompareModel().compare_values(body.model_dump(), actual_result.json()["booking"])
-        BookingActions().assert_comparison_results(comparison_results)
+        BookingActions().assert_comparison_results(body.model_dump(), actual_result.json()["booking"])
 
     # TODO - find a way to write a test when one of the required fields is missing
     # @pytest.mark.parametrize("case_id, remove, remove_nested", [

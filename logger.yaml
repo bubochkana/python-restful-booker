@@ -31,4 +31,4 @@ handlers:
     filename: "tests.log"
     maxBytes: 500000
     backupCount: 5
-#    filters: [sensitive_data_filter]
+    filters: [sensitive_data_filter]

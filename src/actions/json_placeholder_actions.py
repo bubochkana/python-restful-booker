@@ -74,7 +74,8 @@ class JsonPlaceholderActions:
             raise Exception(f"Expected status code 201, but got {response.status_code}")
 
         created_post_as_model = PostModel(**response.json())
-        self.assert_comparison_results(post_post_model.model_dump(exclude={"id"}), created_post_as_model.model_dump(exclude={"id"}))
+        self.assert_comparison_results(post_post_model.model_dump(exclude={"id"}),
+                                       created_post_as_model.model_dump(exclude={"id"}))
 
         logging.info('Post added successfully')
 

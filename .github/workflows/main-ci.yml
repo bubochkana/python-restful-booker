@@ -3,7 +3,7 @@ name: Main Pipeline
 on:
   push:
     branches:
-      - main
+      - add_github_actions
   workflow_dispatch:
   schedule:
     - cron: '0 21 * * *'        # runs every day at 21:00 UTC

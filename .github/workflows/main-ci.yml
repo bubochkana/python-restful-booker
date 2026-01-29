@@ -6,7 +6,7 @@ on:
       - add_github_actions
   workflow_dispatch:
   schedule:
-    - cron: '43 11 * * *'       # runs every day at 21:00 UTC
+    - cron: '53 11 * * *'       # runs every day at 21:00 UTC
 
 permissions:                    # Global permissions configuration starts here
   contents: write               # 'write' access to repository contents

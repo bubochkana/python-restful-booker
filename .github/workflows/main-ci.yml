@@ -2,7 +2,8 @@ name: Main Pipeline
 
 on:
   push:
-    branches: [ "**" ]
+    branches:
+      - main
 
 permissions:                    # Global permissions configuration starts here
   contents: write               # 'write' access to repository contents
@@ -14,7 +15,6 @@ jobs:
   code_check:
     name: Code Style and Security Check
     runs-on: ubuntu-latest
-#    if: github.event.pull_request.draft == false
 
     steps:
       # Step 1: Checkout the code from the repository
@@ -47,7 +47,6 @@ jobs:
     name: Run Tests
     runs-on: ubuntu-latest
     needs: code_check  # Ensure code style and security checks pass first
-#    if: github.event.pull_request.draft == false
 
     steps:
       # Step 1: Checkout the code from the repository

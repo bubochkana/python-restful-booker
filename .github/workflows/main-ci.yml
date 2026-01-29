@@ -4,7 +4,9 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch: {}
+  workflow_dispatch:
+  schedule:
+    - cron: '0 21 * * *'        # runs every day at 21:00 UTC
 
 permissions:                    # Global permissions configuration starts here
   contents: write               # 'write' access to repository contents
@@ -47,6 +49,7 @@ jobs:
   run_tests:
     name: Run Tests
     runs-on: ubuntu-latest
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     needs: code_check  # Ensure code style and security checks pass first
 
     steps:

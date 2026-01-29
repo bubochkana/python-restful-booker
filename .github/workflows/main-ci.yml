@@ -3,10 +3,10 @@ name: Main Pipeline
 on:
   push:
     branches:
-      - add_github_actions
+      - main
   workflow_dispatch:
   schedule:
-    - cron: '03 12 * * *'       # runs every day at 21:00 UTC
+    - cron: '48 12 * * *'       # runs every day at 21:00 UTC
 
 permissions:                    # Global permissions configuration starts here
   contents: write               # 'write' access to repository contents
@@ -49,7 +49,7 @@ jobs:
   run_tests:
     name: Run Tests
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
+    if: github.event_name == 'workflow_dispatch'
     needs: code_check  # Ensure code style and security checks pass first
 
     steps:

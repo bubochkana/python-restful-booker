@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch: {}
 
 permissions:                    # Global permissions configuration starts here
   contents: write               # 'write' access to repository contents

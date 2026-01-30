@@ -1,12 +1,13 @@
+import pytest
 import requests
 from assertpy import assert_that
 
 from src.actions.booking_actions import BookingActions
 from src.clients.booking.booking_client import BookingClient
-from src.helpers.compare_models import CompareModel
 
 
 class TestBookingE2E:
+    @pytest.mark.regression
     def test_booking_create_get_delete_e2e(self):
         actions = BookingActions()
 

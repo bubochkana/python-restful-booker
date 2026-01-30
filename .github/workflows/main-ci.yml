@@ -16,8 +16,12 @@ on:
           - qa
       marker:
         description: "Pytest marker (-m). Default: smoke"
+        type: choice
         required: true
         default: smoke
+        options:
+          - regression
+          - smoke
 
   schedule:
     - cron: '40 11 * * *'       # runs every day at 21:00 UTC

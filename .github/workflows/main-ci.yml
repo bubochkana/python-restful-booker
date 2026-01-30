@@ -3,7 +3,7 @@ name: Main Pipeline
 on:
   push:
     branches:
-      - parametrize_ci
+      - main
   workflow_dispatch:
     inputs:
       env:
@@ -24,7 +24,7 @@ on:
           - smoke
 
   schedule:
-    - cron: '45 10 * * *'       # runs every day at 21:00 UTC
+    - cron: '0 21 * * *'       # runs every day at 21:00 UTC
 
 permissions:                    # Global permissions configuration starts here
   contents: write               # 'write' access to repository contents

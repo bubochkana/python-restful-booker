@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       env:
-        description: "The target environment"
+        description: "The target environment. Default: qa"
         type: choice
         required: true
         default: qa
@@ -69,6 +69,10 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
     needs: code_check  # Ensure code style and security checks pass first
+
+    env:
+      TEST_ENV: ${{ github.event.inputs.env || 'qa' }}
+      TEST_MARKER: ${{ github.event.inputs.marker || 'smoke' }}
 
     steps:
       # Step 1: Checkout the code from the repository

@@ -1,3 +1,4 @@
+import pytest
 import requests
 from assertpy import assert_that
 
@@ -7,6 +8,7 @@ from src.models.bookings.booking_model import BookingModel
 
 
 class TestBookingById:
+    @pytest.mark.smoke
     def test_booking_schema_validation(self):
         client = BookingClient()
         booking_endpoint = client.booking_endpoint()

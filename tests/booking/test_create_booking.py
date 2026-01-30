@@ -3,7 +3,6 @@ from assertpy import assert_that
 
 from src.actions.booking_actions import BookingActions
 from src.clients.booking.booking_client import BookingClient
-from src.helpers.compare_models import CompareModel
 
 
 class TestCreateBooking:

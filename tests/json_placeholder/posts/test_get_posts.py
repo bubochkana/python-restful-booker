@@ -1,3 +1,4 @@
+import pytest
 import requests
 from assertpy import assert_that
 
@@ -7,6 +8,7 @@ from src.models.json_placeholder.posts.post_model import PostModel
 
 
 class TestPosts:
+    @pytest.mark.smoke
     def test_get_all_posts(self):
         client = JsonPlaceholderClient()
         posts_endpoint = client.posts_endpoint()

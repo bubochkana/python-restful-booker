@@ -1,5 +1,6 @@
 import random
 
+import pytest
 import requests
 from assertpy import assert_that
 
@@ -7,6 +8,7 @@ from src.clients.json_placeholder.json_placeholder_client import JsonPlaceholder
 
 
 class TestPosts:
+    @pytest.mark.smoke
     def test_get_comments_for_a_post(self):
         client = JsonPlaceholderClient()
         comments_endpoint = client.comments_endpoint()

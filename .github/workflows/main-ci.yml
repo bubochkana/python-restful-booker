@@ -98,4 +98,4 @@ jobs:
       # Step 5: Run tests
       - name: Run tests
         run: |
-          poetry run pytest
+          poetry run pytest --env "${TEST_ENV}" -m "${TEST_MARKER}"

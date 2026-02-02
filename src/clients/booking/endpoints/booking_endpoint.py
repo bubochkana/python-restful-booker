@@ -4,7 +4,7 @@ This module provides an API client for interacting with booking-related
 endpoints, including creating, retrieving, updating, and deleting
 bookings, as well as generating random booking test data.
 """
-
+from typing import Any, Dict, Union
 
 from requests import Response
 
@@ -68,16 +68,17 @@ class BookingEndpoint(AbstractionEndpoint):
         """
         return self.get(f"{self.host}/booking/{booking_id}")
 
-    def create_booking(self, body: BookingModel) -> Response:
+    def create_booking(self, body: Union[BookingModel, Dict[str, Any]]) -> Response:
         """Create a new booking.
 
         Args:
-            body: Booking model containing booking details.
+        body: BookingModel (happy path) or dict payload (negative tests).
 
         Returns:
-            Response: HTTP response containing created booking information.
+        Response: HTTP response containing created booking information.
         """
-        return self.post(f"{self.host}/booking", json=body.model_dump())
+        payload = body.model_dump(by_alias=True) if hasattr(body, "model_dump") else body
+        return self.post(f"{self.host}/booking", json=payload)
 
     def update_booking(self, booking_id, body, headers=None) -> Response:
         """Update an existing booking.

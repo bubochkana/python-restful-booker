@@ -7,6 +7,7 @@ concise and focused on assertions.
 """
 import logging
 import random
+from datetime import timedelta
 
 from assertpy import assert_that
 from faker import Faker
@@ -191,13 +192,17 @@ class BookingActions:
             BookingModel: Randomly generated booking model.
         """
         faker: Faker = Faker()
+
+        check_in = faker.date_between(start_date="-300d", end_date="today")
+        check_out = faker.date_between(start_date=check_in + timedelta(days=1), end_date="+30d")
+
         return BookingModel(
             firstName=faker.first_name(),
             lastName=faker.last_name(),
             totalPrice=faker.random_int(min=1, max=500),
             depositPaid=faker.boolean(),
             bookingDates=BookingDatesModel(
-                checkIn=faker.date(pattern="%Y-%m-%d"), checkOut=faker.date(pattern="%Y-%m-%d")
+                checkIn=check_in.strftime("%Y-%m-%d"), checkOut=check_out.strftime("%Y-%m-%d")
             ),
             additionalNeeds=faker.name(),
         )

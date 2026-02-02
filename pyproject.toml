@@ -51,5 +51,5 @@ pythonpath = ["."]
 markers = [
     "smoke: used to check the main functionality and accept the build",
     "regression: used to execute the regression test cycles",
-    "test_case_id(id): used to link the automated test case to the Test case Management system"
+    "test_case_id(test_case_id): used to link the automated test case to the Test case Management system"
     ]

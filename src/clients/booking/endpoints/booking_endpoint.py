@@ -77,7 +77,7 @@ class BookingEndpoint(AbstractionEndpoint):
         Returns:
         Response: HTTP response containing created booking information.
         """
-        payload = body.model_dump(by_alias=True) if hasattr(body, "model_dump") else body
+        payload = body.model_dump(mode="json") if hasattr(body, "model_dump") else body
         return self.post(f"{self.host}/booking", json=payload)
 
     def update_booking(self, booking_id, body, headers=None) -> Response:

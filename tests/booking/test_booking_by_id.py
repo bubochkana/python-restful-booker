@@ -8,6 +8,7 @@ from src.models.bookings.booking_model import BookingModel
 
 
 class TestBookingById:
+    @pytest.mark.test_case_id("0001")
     @pytest.mark.smoke
     def test_booking_schema_validation(self):
         client = BookingClient()
@@ -17,6 +18,7 @@ class TestBookingById:
 
         BookingModel.model_validate(response.json())
 
+    @pytest.mark.test_case_id(test_case_id=["0002","0003"])
     def test_get_booking_by_id(self):
         client = BookingClient()
         booking_endpoint = client.booking_endpoint()

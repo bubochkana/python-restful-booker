@@ -22,6 +22,7 @@ on:
         options:
           - regression
           - smoke
+          - test_case_id
 
 #  schedule:
 #    - cron: '0 21 * * *'       # runs every day at 21:00 UTC

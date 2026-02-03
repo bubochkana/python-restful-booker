@@ -62,6 +62,32 @@ def pytest_configure(config):
 
 @pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item, call):
+    """Pytest hook to log test execution results together with associated test case IDs.
+
+    This hook is executed after each phase of a test run (setup, call, teardown).
+    It wraps the default pytest behavior, waits for the test report to be created,
+    and processes only the actual test execution phase ("call").
+
+    For the executed test, it collects all ``test_case_id`` markers attached to the
+    test item, including markers defined at the function level and those attached
+    to individual parametrized cases via ``pytest.param(..., marks=...)``.
+
+    The hook supports both positional and keyword marker arguments, for example:
+        - ``@pytest.mark.test_case_id("1234")``
+        - ``@pytest.mark.test_case_id(test_case_id="1234")``
+
+    If no ``test_case_id`` marker is present, ``"N/A"`` is used as a fallback.
+
+    The collected test case IDs, together with the test name and execution outcome
+    (PASSED / FAILED / SKIPPED), are written to the framework logger. This allows
+    consistent traceability between automated tests and external test management
+    systems in local runs and CI pipelines.
+
+    Args:
+        item: Pytest test item representing the test function being executed,
+              including its markers and parametrization context.
+        call: Pytest CallInfo object describing the current execution phase.
+    """
     outcome = yield
     report = outcome.get_result()
 

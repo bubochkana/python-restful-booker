@@ -72,7 +72,7 @@ def pytest_runtest_makereport(item, call):
         for m in item.iter_markers(name="test_case_id"):
             if "test_case_id" in m.kwargs:
                 ids.append(str(m.kwargs["test_case_id"]))
-            elif m.args:
+            elif isinstance(m.args, list) and len(m.args) > 0:
                 ids.append(str(m.args[0]))
 
         if not ids:

@@ -1,8 +1,10 @@
 import requests
 from assertpy import assert_that
+from requests import Session
 
 from src.actions.booking_actions import BookingActions
 from src.clients.booking.booking_client import BookingClient
+from src.clients.booking.endpoints.booking_endpoint import BookingEndpoint
 
 
 class TestDeleteBooking:
@@ -17,14 +19,14 @@ class TestDeleteBooking:
 
     def test_delete_booking_no_headers(self):
         client = BookingClient()
-        booking_endpoint = client.booking_endpoint()
+        booking_endpoint = BookingEndpoint(config=client.config, session=Session())
 
         response = booking_endpoint.delete_booking(BookingActions().pick_random_booking_id(), headers = {})
         assert_that(response.status_code).is_equal_to(requests.codes.forbidden)
 
     def test_delete_booking_no_auth_header(self):
         client = BookingClient()
-        booking_endpoint = client.booking_endpoint()
+        booking_endpoint = BookingEndpoint(config=client.config, session=Session())
 
         response = booking_endpoint.delete_booking(
             BookingActions().pick_random_booking_id(), headers={"Content-Type": "application/json"}

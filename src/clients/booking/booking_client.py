@@ -3,9 +3,7 @@
 This module provides a client facade for accessing booking-related API
 endpoints.
 """
-from requests import Session
 
-from src.clients.booking.endpoints.auth_endpoint import AuthEndpoint
 from src.clients.booking.endpoints.booking_endpoint import BookingEndpoint
 from src.clients.common.base_client import AbstractionClient
 
@@ -18,20 +16,23 @@ class BookingClient(AbstractionClient):
     booking-related endpoints.
     """
 
-    def __init__(self, session: Session = None):
-        """Initialize the BookingClient.
+    def __init__(self):
+        """Initialize the booking client.
 
-        Loads booking configuration from the environment and initializes
-        the authentication endpoint using configured credentials.
+        Loads booking-related configuration and prepares the client for
+        accessing booking API endpoints. Configuration is resolved via the
+        underlying ``AbstractionClient`` using the ``booking_config`` profile.
         """
         super().__init__(client_config="booking_config")
 
-        self._session = session or AuthEndpoint(self.config)
-
     def booking_endpoint(self) -> BookingEndpoint:
-        """Return the booking endpoint.
+        """Create and return a booking endpoint instance.
+
+        The returned endpoint is configured with booking environment settings
+        and an authenticated session, enabling interaction with booking-related
+        API operations.
 
         Returns:
-            BookingEndpoint: A booking endpoint configured with authentication.
+            BookingEndpoint: An initialized booking endpoint client.
         """
-        return BookingEndpoint(host=self.config.host, session=self._session)
+        return BookingEndpoint(config=self.config)

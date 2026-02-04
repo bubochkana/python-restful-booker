@@ -11,9 +11,11 @@ payloads and headers to be passed through to the underlying HTTP layer.
 """
 from typing import Any, Dict, Union
 
-from requests import Response
+from requests import Response, Session
 
+from src.clients.booking.endpoints.auth_endpoint import AuthEndpoint
 from src.clients.common.base_endpoint import AbstractionEndpoint
+from src.configs.booking_config_model import BookingEnvironmentConfig
 from src.models.bookings.booking_model import BookingModel
 
 
@@ -26,17 +28,29 @@ class BookingEndpoint(AbstractionEndpoint):
     the base ``AbstractionEndpoint`` class.
     """
 
-    def __init__(self, host: str, session):
+    def __init__(self, config: BookingEnvironmentConfig, session: Session = None):
         """Initialize the booking endpoint.
 
-        Args:
-            host: Base URL of the booking API.
-            session: HTTP session used to execute requests. This is typically
-                an authenticated session injected by the client.
-        """
-        super().__init__(session=session)
+        Creates a booking endpoint bound to the configured API host and
+        initializes the HTTP session used for request execution. If no
+        custom session is provided, an authenticated session
+        (``AuthEndpoint``) is created automatically using the supplied
+        environment configuration.
 
-        self.host = host
+        This design allows endpoints that require authentication to
+        transparently manage auth while still supporting dependency
+        injection for negative test scenarios or custom session behavior.
+
+        Args:
+            config: Booking environment configuration containing the API
+                host and authentication credentials.
+            session: Optional custom HTTP session to use for request
+                execution. If not provided, an authenticated session is
+                initialized internally.
+        """
+        self.host = config.host
+        auth_session = session or AuthEndpoint(config)
+        super().__init__(session=auth_session)
 
     def get_all_bookings(
         self,
@@ -86,18 +100,36 @@ class BookingEndpoint(AbstractionEndpoint):
         return self.post(f"{self.host}/booking", json=payload)
 
     def update_booking(self, booking_id, body, headers=None) -> Response:
-        # token = self.auth_endpoint.get_token()
-        # default_headers = {"Content-Type": "application/json", "Accept": "application/json", "Cookie": f"token={token}"}
-        #
-        # final_headers = default_headers if headers is None else headers
+        """Update an existing booking by its unique identifier.
 
+        Sends a PUT request to the booking API to update the booking data.
+        Optional HTTP headers may be provided to customize the request
+        (for example, to override authentication behavior in negative tests).
+
+        Args:
+            booking_id: Unique identifier of the booking to update.
+            body: BookingModel instance containing updated booking data.
+            headers: Optional dictionary of HTTP headers to include in the request.
+
+        Returns:
+            Response: HTTP response returned by the update operation.
+        """
         return self.put(f"{self.host}/booking/{booking_id}", json=body.model_dump(), headers=headers)
 
     def delete_booking(self, booking_id, headers=None) -> Response:
-        # default_headers = {"Content-Type": "application/json", "Cookie": f"token={token}"}
-        #
-        # final_headers = default_headers if headers is None else headers
+        """Delete a booking by its unique identifier.
 
+        Sends a DELETE request to the booking API to remove the specified booking.
+        Optional HTTP headers may be provided to customize the request
+        (for example, to omit authentication headers in negative test scenarios).
+
+        Args:
+            booking_id: Unique identifier of the booking to delete.
+            headers: Optional dictionary of HTTP headers to include in the request.
+
+        Returns:
+            Response: HTTP response returned by the delete operation.
+        """
         return self.delete(f"{self.host}/booking/{booking_id}", headers=headers)
 
 

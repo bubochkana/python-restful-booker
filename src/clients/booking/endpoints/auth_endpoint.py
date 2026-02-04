@@ -1,42 +1,35 @@
-"""Authentication endpoint client.
+from requests import Session, Request, PreparedRequest
 
-This module provides an endpoint wrapper responsible for authenticating
-against the booking service and retrieving an authorization token.
-"""
-from src.clients.common.base_endpoint import AbstractionEndpoint
+from src.configs.booking_config_model import BookingEnvironmentConfig
 
 
-class AuthEndpoint(AbstractionEndpoint):
-    """Authentication endpoint client.
-
-    This class handles authentication requests to the booking service
-    using provided user credentials and returns an authorization token.
-    """
-
-    def __init__(self, host: str, username: str, password: str):
-        """Initialize the AuthEndpoint.
-
-        Args:
-            host: Base URL of the booking service.
-            username: Username used for authentication.
-            password: Password used for authentication.
-        """
+class AuthEndpoint(Session):
+    def __init__(self, config: BookingEnvironmentConfig):
         super().__init__()
 
-        self.host = host
-        self.username = username
-        self.password = password
+        self._host = config.host
+        self._username = config.username
+        self._password = config.password
+        self._token = None
+        self._auth_url = f"{self._host}/auth"
 
-    def get_token(self) -> str:
-        """Authenticate and retrieve an authorization token.
+    def _generate_token(self) -> str:
+        s = Session()
+        s.headers = {"Content-Type": "application/json"}
+        s.body = {"username": self._username, "password": self._password}
 
-        Sends a POST request to the authentication endpoint with the
-        configured credentials and returns the token from the response.
+        response = s.request(
+            method = "POST",
+            url = self._auth_url,
+            json=s.body,
+            headers=s.headers
+        )
 
-        Returns:
-            str: Authentication token returned by the booking service.
-        """
-        headers = {"Content-Type": "application/json"}
-        body = {"username": self.username, "password": self.password}
-        response = self.post(f"{self.host}/auth", json=body, headers=headers)
-        return response.json()["token"]
+        self._token = response.json()["token"]
+
+        return self._token
+
+    def prepare_request(self, request: Request) -> PreparedRequest:
+        prepared_request = PreparedRequest()
+        return prepared_request
+

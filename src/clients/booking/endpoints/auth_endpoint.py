@@ -67,8 +67,12 @@ class AuthEndpoint(Session):
         response = requests.post(
             url=self._auth_url,
             json=body,
-            headers=headers
-        )
+            headers=headers)
+
+        try:
+            self._token = response.json()["token"]
+        except Exception as e:
+            raise RuntimeError(f'Auth token not found in response: {response.json()["reason"]}') from e
 
         self._token = response.json()["token"]
         self.headers.update({"Cookie": f'token={self._token}'})
@@ -84,7 +88,7 @@ class AuthEndpoint(Session):
         Returns:
             bool: ``True`` if a new token should be generated, otherwise ``False``.
         """
-        if self._expiration is None or datetime.now() >= self._expiration or self._token is None:
+        if self._token is None:
             return True
         return False
 

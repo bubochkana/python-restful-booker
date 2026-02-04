@@ -1,3 +1,14 @@
+"""Booking API endpoint client.
+
+This module defines a high-level client for interacting with booking-related
+API endpoints. It provides methods for creating, retrieving, updating, and
+deleting bookings, and relies on a shared HTTP session supplied by the
+``AbstractionEndpoint`` base class.
+
+The endpoint implementation is designed to be used by a client facade and
+supports both positive and negative test scenarios by allowing custom request
+payloads and headers to be passed through to the underlying HTTP layer.
+"""
 from typing import Any, Dict, Union
 
 from requests import Response
@@ -7,8 +18,22 @@ from src.models.bookings.booking_model import BookingModel
 
 
 class BookingEndpoint(AbstractionEndpoint):
+    """API endpoint client for booking-related operations.
+
+    This class provides high-level methods for interacting with the booking
+    API, including creating, retrieving, updating, and deleting bookings.
+    All HTTP requests are executed through the shared session provided by
+    the base ``AbstractionEndpoint`` class.
+    """
 
     def __init__(self, host: str, session):
+        """Initialize the booking endpoint.
+
+        Args:
+            host: Base URL of the booking API.
+            session: HTTP session used to execute requests. This is typically
+                an authenticated session injected by the client.
+        """
         super().__init__(session=session)
 
         self.host = host

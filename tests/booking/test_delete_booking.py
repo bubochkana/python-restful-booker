@@ -19,7 +19,7 @@ class TestDeleteBooking:
         client = BookingClient()
         booking_endpoint = client.booking_endpoint()
 
-        response = booking_endpoint.delete_booking(BookingActions().pick_random_booking_id(), {})
+        response = booking_endpoint.delete_booking(BookingActions().pick_random_booking_id(), headers = {})
         assert_that(response.status_code).is_equal_to(requests.codes.forbidden)
 
     def test_delete_booking_no_auth_header(self):

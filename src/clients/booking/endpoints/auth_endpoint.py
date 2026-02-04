@@ -73,7 +73,6 @@ class AuthEndpoint(Session):
         except Exception as e:
             raise RuntimeError(f'Auth token not found in response: {response.json()["reason"]}') from e
 
-        self._token = response.json()["token"]
         self.headers.update({"Cookie": f'token={self._token}'})
 
         return self._token

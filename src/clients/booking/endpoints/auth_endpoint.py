@@ -10,7 +10,6 @@ credentials, and the resulting token is attached to subsequent requests
 as an HTTP cookie. The session is designed to be shared across endpoint
 clients that require authenticated access.
 """
-from datetime import datetime
 
 import requests
 from requests import PreparedRequest, Request, Session

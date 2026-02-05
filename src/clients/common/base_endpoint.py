@@ -1,108 +1,107 @@
-"""Base abstraction for HTTP endpoint clients.
+"""Base abstractions for HTTP API endpoint clients.
 
-This module provides a common base class for API endpoint implementations.
-It centralizes HTTP request execution, logging, and masking of sensitive
-data in request and response payloads.
+This module defines a common base class used by API endpoint implementations
+to perform HTTP requests via ``requests.Session``. It centralizes request
+execution, optional status-code validation, and structured logging of request
+and response metadata to support debugging and test diagnostics.
+
+Endpoint-specific clients should inherit from the provided base class and
+use its helper methods instead of calling ``requests`` directly.
 """
 import json
 import logging.config
 
-import requests
-from requests import Response
+from requests import Response, Session
 
 
 class AbstractionEndpoint:
-    """Base abstraction for HTTP endpoint clients.
+    """Base abstraction for HTTP API endpoint clients.
 
-    This module provides a common base class for API endpoint implementations.
-    It centralizes HTTP request execution, logging, and masking of sensitive
-    data in request and response payloads.
+    This class provides a common foundation for implementing API endpoint
+    wrappers on top of ``requests.Session``. It centralizes HTTP request
+    execution, optional status-code validation, and structured logging of
+    request and response data.
+
+    Endpoint-specific classes should inherit from this base class and use
+    its request helpers rather than calling ``requests`` directly.
     """
-    def __init__(self):
-        """Base class for API endpoint implementations.
+    def __init__(self, session: Session = None):
+        """Base abstraction for HTTP API endpoint clients.
 
-        This class provides common HTTP verb helpers and a unified request
-        handler that includes logging and masking of sensitive information
-        such as authentication tokens.
+        This class provides a common foundation for implementing API endpoint
+        wrappers on top of ``requests.Session``. It centralizes HTTP request
+        execution, optional status-code validation, and structured logging of
+        request and response data.
+
+        Endpoint-specific classes should inherit from this base class and use
+        its request helpers rather than calling ``requests`` directly.
         """
+        self.session = session or Session()
         self.logger = logging.getLogger(self.__class__.__name__)
 
     def post(self, *args, **kwargs) -> Response:
         """Send an HTTP POST request.
 
-        This method delegates to the generic request handler using the
-        POST HTTP method.
+        This is a convenience wrapper around the generic ``request`` method.
 
         Args:
-            *args: Positional arguments forwarded to the request handler.
-            **kwargs: Keyword arguments forwarded to the request handler.
+            *args: Positional arguments forwarded to ``request``.
+            **kwargs: Keyword arguments forwarded to ``request``.
 
         Returns:
-            Response: HTTP response returned by the request.
+            Response: The HTTP response returned by the server.
         """
         return self.request('POST', *args, **kwargs)
 
     def get(self, url, *args, **kwargs) -> Response:
         """Send an HTTP GET request.
 
-        This method delegates to the generic request handler using the
-        GET HTTP method.
-
         Args:
             url: Target URL for the request.
-            *args: Positional arguments forwarded to the request handler.
-            **kwargs: Keyword arguments forwarded to the request handler.
+            *args: Additional positional arguments forwarded to ``request``.
+            **kwargs: Additional keyword arguments forwarded to ``request``.
 
         Returns:
-            Response: HTTP response returned by the request.
+            Response: The HTTP response returned by the server.
         """
         return self.request('GET', url, *args, **kwargs)
 
     def put(self, url, *args, **kwargs) -> Response:
         """Send an HTTP PUT request.
 
-        This method delegates to the generic request handler using the
-        PUT HTTP method.
-
         Args:
             url: Target URL for the request.
-            *args: Positional arguments forwarded to the request handler.
-            **kwargs: Keyword arguments forwarded to the request handler.
+            *args: Additional positional arguments forwarded to ``request``.
+            **kwargs: Additional keyword arguments forwarded to ``request``.
 
         Returns:
-            Response: HTTP response returned by the request.
+            Response: The HTTP response returned by the server.
         """
         return self.request('PUT', url, *args, **kwargs)
 
     def patch(self, url, *args, **kwargs) -> Response:
         """Send an HTTP PATCH request.
 
-        This method delegates to the generic request handler using the
-        PATCH HTTP method.
-
         Args:
             url: Target URL for the request.
-            *args: Positional arguments forwarded to the request handler.
-            **kwargs: Keyword arguments forwarded to the request handler.
+            *args: Additional positional arguments forwarded to ``request``.
+            **kwargs: Additional keyword arguments forwarded to ``request``.
 
         Returns:
-            Response: HTTP response returned by the request.
+            Response: The HTTP response returned by the server.
         """
         return self.request('PATCH', url, *args, **kwargs)
 
     def delete(self, url, *args, **kwargs) -> Response:
         """Send an HTTP DELETE request.
 
-        This method delegates to the generic request handler using the
-        DELETE HTTP method.
-
         Args:
             url: Target URL for the request.
-            *args: Positional arguments forwarded to the request handler.
-            **kwargs: Keyword arguments forwarded to the request handler.
+            *args: Additional positional arguments forwarded to ``request``.
+            **kwargs: Additional keyword arguments forwarded to ``request``.
 
         Returns:
-            Response: HTTP response returned by the request.
+            Response: The HTTP response returned by the server.
         """
         return self.request('DELETE', url, *args, **kwargs)
 
@@ -137,38 +136,31 @@ class AbstractionEndpoint:
         return str(body)
 
     def request(self, method, url, expected_status_code=None, *args, **kwargs):
-        """Execute an HTTP request and log request and response details.
+        """Execute an HTTP request using the configured session.
 
-            This method sends an HTTP request using the ``requests`` library,
-            optionally validates the response status code, formats request and
-            response bodies into a human-readable form, and logs headers and
-            bodies for debugging and traceability.
-
-            Request and response bodies are safely formatted for logging:
-            - JSON objects and arrays are pretty-printed
-            - Empty bodies are handled gracefully
-            - Non-JSON content is logged as plain text
+        This method sends the request via the underlying session, optionally
+        validates the expected HTTP status code, and logs request and response
+        details for diagnostic purposes.
 
         Args:
-                method: HTTP method to use (e.g. ``"GET"``, ``"POST"``, ``"PUT"``,
-                    ``"DELETE"``).
-                url: Target URL for the request.
-                expected_status_code: Optional expected HTTP status code. If
-                    provided and the actual response status code differs, an
-                    exception is raised.
-                *args: Positional arguments forwarded to ``requests.request``.
-                **kwargs: Keyword arguments forwarded to ``requests.request``
-                    (e.g. headers, params, json, data).
+            method: HTTP method name (e.g. ``"GET"``, ``"POST"``).
+            url: Target URL for the request.
+            expected_status_code: Optional expected HTTP status code. If
+                provided and the response status does not match, an exception
+                is raised.
+            *args: Additional positional arguments forwarded to
+                ``requests.Session.request``.
+            **kwargs: Additional keyword arguments forwarded to
+                ``requests.Session.request``.
 
         Returns:
-                requests.Response: The HTTP response object returned by
-                ``requests.request``.
+            Response: The HTTP response returned by the server.
 
         Raises:
-        Exception: If ``expected_status_code`` is provided and the actual
-        response status code does not match the expected value.
+            Exception: If ``expected_status_code`` is provided and the actual
+                response status code does not match.
         """
-        response = requests.request(method, url, *args, **kwargs)
+        response = self.session.request(method, url, *args, **kwargs)
 
         if expected_status_code is not None and response.status_code != expected_status_code:
             raise Exception(
@@ -192,5 +184,7 @@ class AbstractionEndpoint:
         self.logger.debug(f"`Response` Headers: {response_headers}")
         self.logger.debug(f"Response Body: {formatted_response_body}")
         return response
+
+
 
 

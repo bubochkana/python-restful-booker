@@ -19,7 +19,7 @@ formatters:
     datefmt: "%Y-%m-%dT%H:%M:%S%z"
 handlers:
   console:
-    level: INFO
+    level: DEBUG
     class: logging.StreamHandler
     formatter: colored_console
     stream: ext://sys.stdout

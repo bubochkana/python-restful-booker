@@ -1,37 +1,56 @@
-"""Booking endpoint client.
+"""Booking API endpoint client.
 
-This module provides an API client for interacting with booking-related
-endpoints, including creating, retrieving, updating, and deleting
-bookings, as well as generating random booking test data.
+This module defines a high-level client for interacting with booking-related
+API endpoints. It provides methods for creating, retrieving, updating, and
+deleting bookings, and relies on a shared HTTP session supplied by the
+``AbstractionEndpoint`` base class.
+
+The endpoint implementation is designed to be used by a client facade and
+supports both positive and negative test scenarios by allowing custom request
+payloads and headers to be passed through to the underlying HTTP layer.
 """
 from typing import Any, Dict, Union
 
-from requests import Response
+from requests import Response, Session
 
+from src.clients.booking.endpoints.auth_endpoint import AuthEndpoint
 from src.clients.common.base_endpoint import AbstractionEndpoint
+from src.configs.booking_config_model import BookingEnvironmentConfig
 from src.models.bookings.booking_model import BookingModel
 
 
 class BookingEndpoint(AbstractionEndpoint):
-    """Client for booking-related API operations.
+    """API endpoint client for booking-related operations.
 
-    This class encapsulates HTTP interactions with the booking service,
-    including CRUD operations and helper methods for generating
-    booking-related test data.
+    This class provides high-level methods for interacting with the booking
+    API, including creating, retrieving, updating, and deleting bookings.
+    All HTTP requests are executed through the shared session provided by
+    the base ``AbstractionEndpoint`` class.
     """
 
-    def __init__(self, host: str, auth_endpoint=None):
-        """Initialize the BookingEndpoint.
+    def __init__(self, config: BookingEnvironmentConfig, session: Session = None):
+        """Initialize the booking endpoint.
+
+        Creates a booking endpoint bound to the configured API host and
+        initializes the HTTP session used for request execution. If no
+        custom session is provided, an authenticated session
+        (``AuthEndpoint``) is created automatically using the supplied
+        environment configuration.
+
+        This design allows endpoints that require authentication to
+        transparently manage auth while still supporting dependency
+        injection for negative test scenarios or custom session behavior.
 
         Args:
-            host: Base URL of the booking service.
-            auth_endpoint: Authentication endpoint used to retrieve
-                authorization tokens for protected operations.
+            config: Booking environment configuration containing the API
+                host and authentication credentials.
+            session: Optional custom HTTP session to use for request
+                execution. If not provided, an authenticated session is
+                initialized internally.
         """
-        super().__init__()
-
-        self.host = host
-        self.auth_endpoint = auth_endpoint
+        self.host = config.host
+        auth_session = session or AuthEndpoint(config)
+        super().__init__(session=auth_session)
 
     def get_all_bookings(
         self,
@@ -81,40 +100,36 @@ class BookingEndpoint(AbstractionEndpoint):
         return self.post(f"{self.host}/booking", json=payload)
 
     def update_booking(self, booking_id, body, headers=None) -> Response:
-        """Update an existing booking.
+        """Update an existing booking by its unique identifier.
+
+        Sends a PUT request to the booking API to update the booking data.
+        Optional HTTP headers may be provided to customize the request
+        (for example, to override authentication behavior in negative tests).
 
         Args:
-            booking_id: Unique identifier of the booking.
-            body: The booking model to user for update.
-            headers: Optional custom HTTP headers. If not provided,
-                the default authorization headers will be used.
+            booking_id: Unique identifier of the booking to update.
+            body: BookingModel instance containing updated booking data.
+            headers: Optional dictionary of HTTP headers to include in the request.
 
         Returns:
-            Response: HTTP response containing updated booking information.
+            Response: HTTP response returned by the update operation.
         """
-        token = self.auth_endpoint.get_token()
-        default_headers = {"Content-Type": "application/json", "Accept": "application/json", "Cookie": f"token={token}"}
-
-        final_headers = default_headers if headers is None else headers
-
-        return self.put(f"{self.host}/booking/{booking_id}", json=body.model_dump(), headers=final_headers)
+        return self.put(f"{self.host}/booking/{booking_id}", json=body.model_dump(), headers=headers)
 
     def delete_booking(self, booking_id, headers=None) -> Response:
-        """Delete a booking.
+        """Delete a booking by its unique identifier.
+
+        Sends a DELETE request to the booking API to remove the specified booking.
+        Optional HTTP headers may be provided to customize the request
+        (for example, to omit authentication headers in negative test scenarios).
 
         Args:
-            booking_id: Unique identifier of the booking.
-            headers: Optional custom HTTP headers. If not provided,
-                the default authorization headers will be used.
+            booking_id: Unique identifier of the booking to delete.
+            headers: Optional dictionary of HTTP headers to include in the request.
 
         Returns:
-            Response: HTTP response indicating deletion status.
+            Response: HTTP response returned by the delete operation.
         """
-        token = self.auth_endpoint.get_token()
-        default_headers = {"Content-Type": "application/json", "Cookie": f"token={token}"}
-
-        final_headers = default_headers if headers is None else headers
-
-        return self.delete(f"{self.host}/booking/{booking_id}", headers=final_headers)
+        return self.delete(f"{self.host}/booking/{booking_id}", headers=headers)
 
 

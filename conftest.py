@@ -7,9 +7,12 @@ test execution.
 
 import pytest
 import yaml
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session
 
 from src.common.common_paths import CommonPaths
 from src.common.logging_manager import LoggingManager
+from src.models.bookings.sql_alchemy_booking_model import Base
 from src.utils.env_loader import EnvLoader
 
 
@@ -105,3 +108,24 @@ def pytest_runtest_makereport(item, call):
             ids = ["N/A"]
 
         logging.info(f'test_case_id={','.join(ids)} {report.head_line} {report.outcome.upper()}')
+
+@pytest.fixture()
+def connect_to_db():
+    """Provide a SQLAlchemy session connected to the test booking database.
+
+    This fixture creates a SQLite engine pointing to the test database file,
+    initializes the database schema using SQLAlchemy metadata, and yields an
+    active session for use in tests. The session is closed automatically
+    after the test finishes.
+
+    Yields:
+        Session: An active SQLAlchemy session bound to the test database.
+    """
+    engine = create_engine(
+        f'sqlite:////{CommonPaths.project_root().joinpath("tests").joinpath("resources")}/booking.db',
+        echo=True)
+    Base.metadata.create_all(engine)
+
+    with Session(engine) as session:
+        yield session
+        session.close()

@@ -5,10 +5,11 @@ used to retrieve booking records from the database. It is designed to work
 with externally managed SQLAlchemy sessions, such as those provided by
 pytest fixtures or application-level session factories.
 """
+
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from src.models.bookings.sql_alchemy_booking_model import BookingDB
+from src.models.bookings.sql_alchemy_booking_model import BookingDBModel
 
 
 class SqlAlchemyQueryManager:
@@ -20,6 +21,7 @@ class SqlAlchemyQueryManager:
     session lifecycle to be controlled by the caller (for example, via
     pytest fixtures or application-level session management).
     """
+
     def __init__(self, session: Session):
         """Initialize the query manager with an active SQLAlchemy session.
 
@@ -29,7 +31,7 @@ class SqlAlchemyQueryManager:
         """
         self.session = session
 
-    def select_booking(self, booking_id) -> BookingDB:
+    def select_booking(self, booking_id) -> BookingDBModel:
         """Retrieve a booking record by its unique identifier.
 
         Executes a SELECT query against the ``BookingDB`` table and returns
@@ -39,7 +41,7 @@ class SqlAlchemyQueryManager:
             booking_id: Unique identifier of the booking to retrieve.
 
         Returns:
-            BookingDB | None: The matching booking record if it exists,
+            BookingDBModel | None: The matching booking record if it exists,
             otherwise ``None``.
         """
-        return self.session.scalar(select(BookingDB).where(BookingDB.bookingid == booking_id))
+        return self.session.scalar(select(BookingDBModel).where(BookingDBModel.bookingid == booking_id))

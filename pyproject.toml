@@ -47,7 +47,7 @@ extend-select = [
 convention = "google"
 
 [tool.ruff.format]
-quote-style = "double"
+quote-style = "single"
 indent-style = "space"
 line-ending = "auto"
 

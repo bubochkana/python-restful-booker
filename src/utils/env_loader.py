@@ -13,7 +13,7 @@ from src.configs.env_config_model import EnvConfig
 from src.configs.jsonplaceholder_config_model import JsonPlaceholderEnvironmentConfig
 from src.utils.singleton_meta import SingletonMeta
 
-EnvName = Literal["dev", "qa"]
+EnvName = Literal['dev', 'qa']
 
 
 class EnvLoader(metaclass=SingletonMeta):
@@ -24,7 +24,7 @@ class EnvLoader(metaclass=SingletonMeta):
     clients, such as booking and JsonPlaceholder services.
     """
 
-    def __init__(self, test_env: EnvName = "qa"):
+    def __init__(self, test_env: EnvName = 'qa'):
         """Initialize the environment loader.
 
         Loads configuration for the specified environment and initializes

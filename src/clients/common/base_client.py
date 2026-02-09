@@ -3,6 +3,7 @@
 This module provides a base client class responsible for loading and
 exposing environment-specific configuration for concrete API clients.
 """
+
 from src.utils.env_loader import EnvLoader
 
 
@@ -13,6 +14,7 @@ class AbstractionClient:
     different API clients. Concrete clients specify which configuration
     section should be used (e.g., booking or JSONPlaceholder).
     """
+
     def __init__(self, client_config):
         """Initialize the client with an environment-specific configuration.
 
@@ -34,4 +36,4 @@ class AbstractionClient:
         try:
             self.config = getattr(env_loader, client_config)
         except AttributeError:
-            raise AttributeError(f"Unknown config: {client_config}")
+            raise AttributeError(f'Unknown config: {client_config}')

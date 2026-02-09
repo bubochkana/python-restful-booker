@@ -5,7 +5,6 @@ endpoints of the JsonPlaceholder service, including retrieving, creating,
 updating, deleting posts, and generating random post test data.
 """
 
-
 from requests import Response
 
 from src.clients.common.base_endpoint import AbstractionEndpoint
@@ -38,7 +37,7 @@ class PostsEndpoint(AbstractionEndpoint):
         Returns:
             Response: HTTP response containing a list of posts.
         """
-        return self.get(f"{self.host}/posts")
+        return self.get(f'{self.host}/posts')
 
     def get_post_by_id(self, post_id) -> Response:
         """Retrieve a post by its identifier.
@@ -49,7 +48,7 @@ class PostsEndpoint(AbstractionEndpoint):
         Returns:
             Response: HTTP response containing post details.
         """
-        return self.get(f"{self.host}/posts/{post_id}")
+        return self.get(f'{self.host}/posts/{post_id}')
 
     def get_all_comments_for_the_post_id(self, post_id) -> Response:
         """Retrieve all comments for a specific post.
@@ -60,7 +59,7 @@ class PostsEndpoint(AbstractionEndpoint):
         Returns:
             Response: HTTP response containing a list of comments for the post.
         """
-        return self.get(f"{self.host}/posts/{post_id}/comments")
+        return self.get(f'{self.host}/posts/{post_id}/comments')
 
     def create_post(self, body: PostModel) -> Response:
         """Create a new post.
@@ -71,7 +70,7 @@ class PostsEndpoint(AbstractionEndpoint):
         Returns:
             Response: HTTP response containing created post information.
         """
-        return self.post(f"{self.host}/posts", json=body.model_dump())
+        return self.post(f'{self.host}/posts', json=body.model_dump())
 
     def delete_post_by_id(self, post_id) -> Response:
         """Delete a post by its identifier.
@@ -82,7 +81,7 @@ class PostsEndpoint(AbstractionEndpoint):
         Returns:
             Response: HTTP response indicating deletion status.
         """
-        return self.delete(f"{self.host}/posts/{post_id}")
+        return self.delete(f'{self.host}/posts/{post_id}')
 
     def update_whole_post_by_id(self, body: PostModel, post_id) -> Response:
         """Update an entire post by its identifier.
@@ -94,7 +93,7 @@ class PostsEndpoint(AbstractionEndpoint):
         Returns:
             Response: HTTP response containing updated post information.
         """
-        return self.put(f"{self.host}/posts/{post_id}", json=body.model_dump())
+        return self.put(f'{self.host}/posts/{post_id}', json=body.model_dump())
 
     def update_partially_post_by_id(self, body: PostModel, post_id) -> Response:
         """Partially update a post by its identifier.
@@ -106,4 +105,4 @@ class PostsEndpoint(AbstractionEndpoint):
         Returns:
             Response: HTTP response containing partially updated post information.
         """
-        return self.patch(f"{self.host}/posts/{post_id}", json=body)
+        return self.patch(f'{self.host}/posts/{post_id}', json=body)

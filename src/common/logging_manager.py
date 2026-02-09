@@ -4,6 +4,7 @@ This module provides a centralized utility for initializing and
 configuring application-wide logging using a dictionary-based
 configuration.
 """
+
 import logging.config
 from logging import Logger
 
@@ -14,6 +15,7 @@ class LoggingManager:
     This class encapsulates logging configuration logic and applies
     dictionary-based logging settings to the Python logging framework.
     """
+
     @staticmethod
     def init_logger(configurations: dict) -> Logger:
         """Initialize and configure the logging system.
@@ -30,5 +32,3 @@ class LoggingManager:
         """
         logging.config.dictConfig(configurations)
         return logging.getLogger(__name__)
-
-

@@ -29,6 +29,7 @@ class AuthEndpoint(Session):
     session headers with a cookie entry (``Cookie: token=<value>``). Token
     generation and refresh are handled transparently before requests are sent.
     """
+
     def __init__(self, config: BookingEnvironmentConfig):
         """Initialize the authenticated session.
 
@@ -48,7 +49,7 @@ class AuthEndpoint(Session):
         self._password = config.password
         self._token = None
         self._expiration = None
-        self._auth_url = f"{self._host}/auth"
+        self._auth_url = f'{self._host}/auth'
 
     def _generate_token(self) -> str:
         """Generate a new authentication token.
@@ -60,20 +61,17 @@ class AuthEndpoint(Session):
         Returns:
             str: The generated authentication token.
         """
-        headers = {"Content-Type": "application/json"}
-        body = {"username": self._username, "password": self._password}
+        headers = {'Content-Type': 'application/json'}
+        body = {'username': self._username, 'password': self._password}
 
-        response = requests.post(
-            url=self._auth_url,
-            json=body,
-            headers=headers)
+        response = requests.post(url=self._auth_url, json=body, headers=headers)
 
         try:
-            self._token = response.json()["token"]
+            self._token = response.json()['token']
         except Exception as e:
             raise RuntimeError(f'Auth token not found in response: {response.json()["reason"]}') from e
 
-        self.headers.update({"Cookie": f'token={self._token}'})
+        self.headers.update({'Cookie': f'token={self._token}'})
 
         return self._token
 
@@ -107,4 +105,3 @@ class AuthEndpoint(Session):
         if self._is_token_refresh_needed():
             self._token = self._generate_token()
         return super().prepare_request(request)
-

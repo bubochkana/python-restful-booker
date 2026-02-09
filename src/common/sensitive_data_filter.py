@@ -1,13 +1,14 @@
 """Logging utilities for masking sensitive data in log output."""
+
 import logging
 import re
 
 sensitive_keys = (
-    "headers",
-    "credentials",
-    "Authorization",
-    "token",
-    "password",
+    'headers',
+    'credentials',
+    'Authorization',
+    'token',
+    'password',
 )
 regex_patterns = [
     # JSON: {"token": "value"}
@@ -30,6 +31,7 @@ class SensitiveDataFilter(logging.Filter):
     data in application logs while preserving log structure and
     readability.
     """
+
     patterns = regex_patterns
     sensitive_keys = sensitive_keys
 
@@ -84,7 +86,7 @@ class SensitiveDataFilter(logging.Filter):
             new_args = args.copy()
             for key in args.keys():
                 if key in sensitive_keys:
-                    new_args[key] = "******"
+                    new_args[key] = '******'
                 else:
                     new_args[key] = self.mask_sensitive_msg(args[key])
             return new_args
@@ -117,4 +119,3 @@ class SensitiveDataFilter(logging.Filter):
                 replace = f"'{key}': '******'"
                 message = re.sub(pattern_str, replace, message)
         return message
-

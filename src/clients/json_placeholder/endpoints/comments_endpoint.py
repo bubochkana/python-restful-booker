@@ -5,7 +5,6 @@ endpoints of the JsonPlaceholder service, including retrieving, creating,
 deleting comments, and generating random comment test data.
 """
 
-
 from requests import Response
 
 from src.clients.common.base_endpoint import AbstractionEndpoint
@@ -20,6 +19,7 @@ class CommentsEndpoint(AbstractionEndpoint):
     allowing retrieval, creation, deletion of comments, and generation
     of random comment data for testing purposes.
     """
+
     def __init__(self, host: str):
         """Initialize the CommentsEndpoint.
 
@@ -40,7 +40,7 @@ class CommentsEndpoint(AbstractionEndpoint):
         Returns:
             Response: HTTP response containing a list of comments for the given post.
         """
-        return self.get(f"{self.host}/comments?postId={post_id}")
+        return self.get(f'{self.host}/comments?postId={post_id}')
 
     def get_comment(self, comment_id) -> Response:
         """Retrieve a comment by its identifier.
@@ -51,7 +51,7 @@ class CommentsEndpoint(AbstractionEndpoint):
         Returns:
             Response: HTTP response containing comment details.
         """
-        return self.get(f"{self.host}/comments?comment_id={comment_id}")
+        return self.get(f'{self.host}/comments?comment_id={comment_id}')
 
     def create_comment_for_post(self, body: CommentModel, post_id) -> Response:
         """Create a new comment for a specific post.
@@ -63,7 +63,7 @@ class CommentsEndpoint(AbstractionEndpoint):
         Returns:
             Response: HTTP response containing created comment information.
         """
-        return self.post(f"{self.host}/posts/{post_id}/comments", json=body.model_dump())
+        return self.post(f'{self.host}/posts/{post_id}/comments', json=body.model_dump())
 
     def delete_comment_by_id(self, post_id) -> Response:
         """Delete a comment by its identifier.
@@ -74,6 +74,4 @@ class CommentsEndpoint(AbstractionEndpoint):
         Returns:
             Response: HTTP response indicating deletion status.
         """
-        return self.delete(f"{self.host}/comments/{post_id}")
-
-
+        return self.delete(f'{self.host}/comments/{post_id}')

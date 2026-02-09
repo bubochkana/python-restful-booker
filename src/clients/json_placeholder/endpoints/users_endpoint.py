@@ -20,6 +20,7 @@ class UsersEndpoint(AbstractionEndpoint):
     provides helper methods for retrieving user data and selecting
     random users for test scenarios.
     """
+
     def __init__(self, host: str):
         """Initialize the UsersEndpoint.
 

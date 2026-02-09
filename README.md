@@ -26,7 +26,9 @@ Hints:
    - poetry add <lib_name>
 2. To run ruff checks execute the command:
    - poetry run ruff check .
-3. To run ruff checks and fix the formatting within the check running (indentation, line length, etc.) execute the command:
+3. To run ruff checks and fix within the check running (import, some docstring issues, some whitespace issues, etc.) execute the command:
    - poetry run ruff check . --fix
-4. To manually update the poetry.lock file execute the command:
+4. To run ruff format checks and fix within the check running (indentation, line length, etc.) execute the command:
+   - poetry run ruff format . 
+5. To manually update the poetry.lock file execute the command:
    - poetry lock

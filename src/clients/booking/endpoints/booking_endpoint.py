@@ -9,6 +9,7 @@ The endpoint implementation is designed to be used by a client facade and
 supports both positive and negative test scenarios by allowing custom request
 payloads and headers to be passed through to the underlying HTTP layer.
 """
+
 from typing import Any, Dict, Union
 
 from requests import Response, Session
@@ -70,11 +71,11 @@ class BookingEndpoint(AbstractionEndpoint):
         Returns:
             Response: HTTP response containing a list of booking IDs.
         """
-        params = {"firstName": firstName, "lastName": lastName, "checkin": checkin, "checkout": checkout}
+        params = {'firstName': firstName, 'lastName': lastName, 'checkin': checkin, 'checkout': checkout}
 
         params = {key: value for key, value in params.items() if value is not None}
 
-        return self.get(f"{self.host}/booking", params=params)
+        return self.get(f'{self.host}/booking', params=params)
 
     def get_booking_by_id(self, booking_id) -> Response:
         """Retrieve a booking by its identifier.
@@ -85,7 +86,7 @@ class BookingEndpoint(AbstractionEndpoint):
         Returns:
             Response: HTTP response containing booking details.
         """
-        return self.get(f"{self.host}/booking/{booking_id}")
+        return self.get(f'{self.host}/booking/{booking_id}')
 
     def create_booking(self, body: Union[BookingModel, Dict[str, Any]]) -> Response:
         """Create a new booking.
@@ -96,8 +97,8 @@ class BookingEndpoint(AbstractionEndpoint):
         Returns:
         Response: HTTP response containing created booking information.
         """
-        payload = body.model_dump(mode="json") if hasattr(body, "model_dump") else body
-        return self.post(f"{self.host}/booking", json=payload)
+        payload = body.model_dump(mode='json') if hasattr(body, 'model_dump') else body
+        return self.post(f'{self.host}/booking', json=payload)
 
     def update_booking(self, booking_id, body, headers=None) -> Response:
         """Update an existing booking by its unique identifier.
@@ -114,7 +115,7 @@ class BookingEndpoint(AbstractionEndpoint):
         Returns:
             Response: HTTP response returned by the update operation.
         """
-        return self.put(f"{self.host}/booking/{booking_id}", json=body.model_dump(), headers=headers)
+        return self.put(f'{self.host}/booking/{booking_id}', json=body.model_dump(), headers=headers)
 
     def delete_booking(self, booking_id, headers=None) -> Response:
         """Delete a booking by its unique identifier.
@@ -130,6 +131,4 @@ class BookingEndpoint(AbstractionEndpoint):
         Returns:
             Response: HTTP response returned by the delete operation.
         """
-        return self.delete(f"{self.host}/booking/{booking_id}", headers=headers)
-
-
+        return self.delete(f'{self.host}/booking/{booking_id}', headers=headers)

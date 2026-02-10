@@ -5,6 +5,7 @@ the Booking API. It abstracts low-level endpoint calls, handles response
 validation, and returns strongly-typed domain models to keep test cases
 concise and focused on assertions.
 """
+
 import logging
 import random
 from datetime import timedelta
@@ -56,11 +57,11 @@ class BookingActions:
         Raises:
             Exception: If the response status code is not 200.
         """
-        logging.info("Getting a booking")
+        logging.info('Getting a booking')
 
         response: Response = self.booking_endpoint.get_booking_by_id(booking_id)
         if response.status_code != 200:
-            raise Exception(f"Expected status code 200, but got {response.status_code}")
+            raise Exception(f'Expected status code 200, but got {response.status_code}')
 
         booking_as_model = BookingModel(**response.json())
 
@@ -78,11 +79,11 @@ class BookingActions:
         Raises:
             Exception: If the response status code is not 200.
         """
-        logging.info("Getting a booking")
+        logging.info('Getting a booking')
 
         response: Response = self.booking_endpoint.get_all_bookings()
         if response.status_code != 200:
-            raise Exception(f"Expected status code 200, but got {response.status_code}")
+            raise Exception(f'Expected status code 200, but got {response.status_code}')
 
         all_bookings_as_model = BookingIdModel(**response.json())
 
@@ -109,19 +110,19 @@ class BookingActions:
             AssertionError: If the created booking does not match the
             request payload.
         """
-        logging.info("Creating a new booking")
+        logging.info('Creating a new booking')
 
         if post_model is None:
             post_model = self.build_random_booking()
 
         response: Response = self.booking_endpoint.create_booking(post_model)
         if response.status_code != 200:
-            raise Exception(f"Expected status code 200, but got {response.status_code}")
+            raise Exception(f'Expected status code 200, but got {response.status_code}')
 
         created_booking_as_model = CreateBookingResponse(**response.json())
         self.assert_comparison_results(post_model.model_dump(), created_booking_as_model.booking.model_dump())
 
-        logging.info("Booking created successfully!")
+        logging.info('Booking created successfully!')
 
         return created_booking_as_model
 
@@ -146,19 +147,19 @@ class BookingActions:
             AssertionError: If the updated booking does not match the
             request payload.
         """
-        logging.info("Updating an existing booking")
+        logging.info('Updating an existing booking')
 
         if put_model is None:
             put_model = self.build_random_booking()
 
         response: Response = self.booking_endpoint.update_booking(booking_id, put_model)
         if response.status_code != 200:
-            raise Exception(f"Expected status code 200, but got {response.status_code}")
+            raise Exception(f'Expected status code 200, but got {response.status_code}')
 
         updated_booking_as_model = BookingModel(**response.json())
         self.assert_comparison_results(put_model.model_dump(), updated_booking_as_model.model_dump())
 
-        logging.info("Booking updated successfully!")
+        logging.info('Booking updated successfully!')
 
         return updated_booking_as_model
 
@@ -174,14 +175,13 @@ class BookingActions:
         Raises:
             Exception: If the response status code is not 201.
         """
-        logging.info("Deleting an existing booking")
+        logging.info('Deleting an existing booking')
 
         response: Response = self.booking_endpoint.delete_booking(booking_id)
         if response.status_code != 201:
-            raise Exception(f"Expected status code 201, but got {response.status_code}")
+            raise Exception(f'Expected status code 201, but got {response.status_code}')
 
-        logging.info("Booking deleted successfully!")
-
+        logging.info('Booking deleted successfully!')
 
     def build_random_booking(self) -> BookingModel:
         """Build a random booking model for testing purposes.
@@ -193,8 +193,8 @@ class BookingActions:
         """
         faker: Faker = Faker()
 
-        check_in = faker.date_between(start_date="-300d", end_date="today")
-        check_out = faker.date_between(start_date=check_in + timedelta(days=1), end_date="+30d")
+        check_in = faker.date_between(start_date='-300d', end_date='today')
+        check_out = faker.date_between(start_date=check_in + timedelta(days=1), end_date='+30d')
 
         return BookingModel(
             firstName=faker.first_name(),
@@ -202,7 +202,7 @@ class BookingActions:
             totalPrice=faker.random_int(min=1, max=500),
             depositPaid=faker.boolean(),
             bookingDates=BookingDatesModel(
-                checkIn=check_in.strftime("%Y-%m-%d"), checkOut=check_out.strftime("%Y-%m-%d")
+                checkIn=check_in.strftime('%Y-%m-%d'), checkOut=check_out.strftime('%Y-%m-%d')
             ),
             additionalNeeds=faker.name(),
         )
@@ -230,9 +230,5 @@ class BookingActions:
             actual_result: The actual data structure to compare against the
                 expected result.
         """
-        comparison_results = CompareModel().compare_values(
-            expected_result, actual_result
-        )
-        assert_that(comparison_results,
-                    f"Following differences found: {comparison_results}").is_empty()
-
+        comparison_results = CompareModel().compare_values(expected_result, actual_result)
+        assert_that(comparison_results, f'Following differences found: {comparison_results}').is_empty()

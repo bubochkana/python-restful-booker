@@ -8,6 +8,7 @@ and response metadata to support debugging and test diagnostics.
 Endpoint-specific clients should inherit from the provided base class and
 use its helper methods instead of calling ``requests`` directly.
 """
+
 import json
 import logging.config
 
@@ -25,6 +26,7 @@ class AbstractionEndpoint:
     Endpoint-specific classes should inherit from this base class and use
     its request helpers rather than calling ``requests`` directly.
     """
+
     def __init__(self, session: Session = None):
         """Base abstraction for HTTP API endpoint clients.
 
@@ -124,15 +126,15 @@ class AbstractionEndpoint:
         str: A formatted string representation of the body that is safe to
         include in logs.
         """
-        if body is None or body == "":
-            return ""
+        if body is None or body == '':
+            return ''
 
         if isinstance(body, (dict, list)):
             try:
                 return json.dumps(body, indent=4)
             except (TypeError, ValueError) as e:
-                self.logger.debug("Failed to serialize", e)
-                return ""
+                self.logger.debug('Failed to serialize', e)
+                return ''
         return str(body)
 
     def request(self, method, url, expected_status_code=None, *args, **kwargs):
@@ -163,9 +165,7 @@ class AbstractionEndpoint:
         response = self.session.request(method, url, *args, **kwargs)
 
         if expected_status_code is not None and response.status_code != expected_status_code:
-            raise Exception(
-                f"Expected status code {expected_status_code}, but got {response.status_code}"
-            )
+            raise Exception(f'Expected status code {expected_status_code}, but got {response.status_code}')
 
         request_headers = dict(response.request.headers or {})
         response_headers = dict(response.headers or {})
@@ -177,14 +177,9 @@ class AbstractionEndpoint:
         except Exception:
             formatted_response_body = self._pretty_json_or_text(response.text)
 
-
-        self.logger.info(f"{method} {url} - {response.status_code}")
-        self.logger.debug(f"Request Headers: {request_headers}")
-        self.logger.debug(f"Request Body: {formatted_request_body}")
-        self.logger.debug(f"`Response` Headers: {response_headers}")
-        self.logger.debug(f"Response Body: {formatted_response_body}")
+        self.logger.info(f'{method} {url} - {response.status_code}')
+        self.logger.debug(f'Request Headers: {request_headers}')
+        self.logger.debug(f'Request Body: {formatted_request_body}')
+        self.logger.debug(f'`Response` Headers: {response_headers}')
+        self.logger.debug(f'Response Body: {formatted_response_body}')
         return response
-
-
-
-

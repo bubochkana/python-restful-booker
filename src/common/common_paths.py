@@ -8,7 +8,7 @@ file locations.
 from pathlib import Path
 from typing import Literal
 
-EnvName = Literal["dev", "qa"]
+EnvName = Literal['dev', 'qa']
 
 
 class CommonPaths:
@@ -44,8 +44,8 @@ class CommonPaths:
         Returns:
             Path: Absolute path to the environment configuration YAML file.
         """
-        filename = f"{env}_configs.yaml"
-        return CommonPaths.project_root().joinpath("src").joinpath("resources").joinpath(f"{env}").joinpath(filename)
+        filename = f'{env}_configs.yaml'
+        return CommonPaths.project_root().joinpath('src').joinpath('resources').joinpath(f'{env}').joinpath(filename)
 
     @staticmethod
     def log_config_file_path() -> Path:
@@ -58,5 +58,5 @@ class CommonPaths:
         Returns:
             Path: Absolute path to the logging configuration YAML file.
         """
-        filename = "logger.yaml"
+        filename = 'logger.yaml'
         return CommonPaths.project_root().joinpath(filename)

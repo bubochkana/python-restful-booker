@@ -5,6 +5,7 @@ the JsonPlaceholder API. It abstracts low-level endpoint calls, performs
 response validation, and converts API responses into strongly-typed
 domain models to keep test cases concise and maintainable.
 """
+
 import logging
 import random
 
@@ -64,18 +65,19 @@ class JsonPlaceholderActions:
             AssertionError: If the created post does not match the request
                 payload.
         """
-        logging.info("Adding a new post")
+        logging.info('Adding a new post')
 
         if post_post_model is None:
             post_post_model = self.build_random_post()
 
         response: Response = self.posts_endpoint.create_post(post_post_model)
         if response.status_code != 201:
-            raise Exception(f"Expected status code 201, but got {response.status_code}")
+            raise Exception(f'Expected status code 201, but got {response.status_code}')
 
         created_post_as_model = PostModel(**response.json())
-        self.assert_comparison_results(post_post_model.model_dump(exclude={"id"}),
-                                       created_post_as_model.model_dump(exclude={"id"}))
+        self.assert_comparison_results(
+            post_post_model.model_dump(exclude={'id'}), created_post_as_model.model_dump(exclude={'id'})
+        )
 
         logging.info('Post added successfully')
 
@@ -101,14 +103,14 @@ class JsonPlaceholderActions:
             AssertionError: If the created comment does not match the request
                 payload.
         """
-        logging.info("Adding a comment to a post")
+        logging.info('Adding a comment to a post')
 
         if comment_post_model is None:
             comment_post_model = self.build_random_comment()
 
         response: Response = self.comments_endpoint.create_comment_for_post(comment_post_model, post_id)
         if response.status_code != 201:
-            raise Exception(f"Expected status code 201, but got {response.status_code}")
+            raise Exception(f'Expected status code 201, but got {response.status_code}')
 
         created_comment_as_model = CommentModel(**response.json())
         self.assert_comparison_results(comment_post_model.model_dump(), comment_post_model.model_dump())
@@ -129,13 +131,13 @@ class JsonPlaceholderActions:
         Raises:
             Exception: If the response status code is not 201.
         """
-        logging.info("Deleting an existing post")
+        logging.info('Deleting an existing post')
 
         response: Response = self.posts_endpoint.delete_post_by_id(post_id)
         if response.status_code != 201:
-            raise Exception(f"Expected status code 201, but got {response.status_code}")
+            raise Exception(f'Expected status code 201, but got {response.status_code}')
 
-        logging.info("Post deleted successfully!")
+        logging.info('Post deleted successfully!')
 
     def delete_comment(self, comment_id) -> None:
         """Delete an existing comment.
@@ -149,13 +151,13 @@ class JsonPlaceholderActions:
         Raises:
             Exception: If the response status code is not 201.
         """
-        logging.info("Deleting an existing comment in a post")
+        logging.info('Deleting an existing comment in a post')
 
         response: Response = self.comments_endpoint.delete_comment_by_id(comment_id)
         if response.status_code != 201:
-            raise Exception(f"Expected status code 201, but got {response.status_code}")
+            raise Exception(f'Expected status code 201, but got {response.status_code}')
 
-        logging.info("Comment deleted successfully!")
+        logging.info('Comment deleted successfully!')
 
     def get_post(self, post_id) -> PostModel:
         """Retrieve a post by its identifier.
@@ -172,11 +174,11 @@ class JsonPlaceholderActions:
         Raises:
             Exception: If the response status code is not 200.
         """
-        logging.info(f"Getting a post by id: {post_id}")
+        logging.info(f'Getting a post by id: {post_id}')
 
         response: Response = self.posts_endpoint.get_post_by_id(post_id)
         if response.status_code != 200:
-            raise Exception(f"Expected status code 200, but got {response.status_code}")
+            raise Exception(f'Expected status code 200, but got {response.status_code}')
 
         post_as_model = PostModel(**response.json())
 
@@ -198,16 +200,15 @@ class JsonPlaceholderActions:
         Raises:
             Exception: If the response status code is not 200.
         """
-        logging.info(f"Getting a post by id: {comment_id}")
+        logging.info(f'Getting a post by id: {comment_id}')
 
         response: Response = self.comments_endpoint.get_comment(comment_id)
         if response.status_code != 200:
-            raise Exception(f"Expected status code 200, but got {response.status_code}")
+            raise Exception(f'Expected status code 200, but got {response.status_code}')
 
         comment_as_model = CommentModel(**response.json())
 
         return comment_as_model
-
 
     def pick_random_post_id(self) -> int:
         """Pick a random post identifier from existing posts.
@@ -273,8 +274,5 @@ class JsonPlaceholderActions:
             actual_result: The actual data structure to compare against the
                 expected result.
         """
-        comparison_results = CompareModel().compare_values(
-            expected_result, actual_result
-        )
-        assert_that(comparison_results,
-                    f"Following differences found: {comparison_results}").is_empty()
+        comparison_results = CompareModel().compare_values(expected_result, actual_result)
+        assert_that(comparison_results, f'Following differences found: {comparison_results}').is_empty()

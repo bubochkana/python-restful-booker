@@ -45,6 +45,6 @@ class EnvConfig(BaseSettings):
         Returns:
             EnvConfig: Parsed environment configuration instance.
         """
-        with open(path, "r") as settings_file:
+        with open(path, 'r') as settings_file:
             content = yaml.safe_load(settings_file)
         return cls(**content)

@@ -23,7 +23,7 @@ class BookingClient(AbstractionClient):
         accessing booking API endpoints. Configuration is resolved via the
         underlying ``AbstractionClient`` using the ``booking_config`` profile.
         """
-        super().__init__(client_config="booking_config")
+        super().__init__(client_config='booking_config')
 
     def booking_endpoint(self) -> BookingEndpoint:
         """Create and return a booking endpoint instance.

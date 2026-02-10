@@ -7,21 +7,25 @@ test execution.
 
 import pytest
 import yaml
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session
 
 from src.common.common_paths import CommonPaths
 from src.common.logging_manager import LoggingManager
+from src.models.bookings.sql_alchemy_booking_model import Base
 from src.utils.env_loader import EnvLoader
 
 
 def _init_logger(config) -> None:
     """Initialize and store the framework logger on the pytest config object."""
-    if getattr(config, "_framework_logger", None) is not None:
+    if getattr(config, '_framework_logger', None) is not None:
         return
 
-    with open(CommonPaths.log_config_file_path(), "r") as f:
+    with open(CommonPaths.log_config_file_path(), 'r') as f:
         logs_config = yaml.safe_load(f)
 
     config._framework_logger = LoggingManager.init_logger(logs_config)
+
 
 def pytest_addoption(parser):
     """Add custom command-line options to pytest.
@@ -32,7 +36,7 @@ def pytest_addoption(parser):
     Args:
         parser: Pytest command-line option parser.
     """
-    parser.addoption("--env", action="store", default="qa", help="Environment name")
+    parser.addoption('--env', action='store', default='qa', help='Environment name')
 
 
 def pytest_configure(config):
@@ -53,12 +57,13 @@ def pytest_configure(config):
     """
     _init_logger(config)
 
-    with open(CommonPaths.log_config_file_path(), "r") as logs_config_file:
+    with open(CommonPaths.log_config_file_path(), 'r') as logs_config_file:
         logs_config = yaml.safe_load(logs_config_file)
     LoggingManager.init_logger(logs_config)
 
-    testing_env = config.getoption("env")
+    testing_env = config.getoption('env')
     EnvLoader(test_env=testing_env)
+
 
 @pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item, call):
@@ -91,17 +96,39 @@ def pytest_runtest_makereport(item, call):
     outcome = yield
     report = outcome.get_result()
 
-    logging = getattr(item.config, "_framework_logger", None)
+    logging = getattr(item.config, '_framework_logger', None)
 
     ids = []
-    if report.when == "call":
-        for m in item.iter_markers(name="test_case_id"):
-            if "test_case_id" in m.kwargs:
-                ids.append(str(m.kwargs["test_case_id"]))
+    if report.when == 'call':
+        for m in item.iter_markers(name='test_case_id'):
+            if 'test_case_id' in m.kwargs:
+                ids.append(str(m.kwargs['test_case_id']))
             elif isinstance(m.args, list) and len(m.args) > 0:
                 ids.append(str(m.args[0]))
 
         if not ids:
-            ids = ["N/A"]
+            ids = ['N/A']
 
-        logging.info(f'test_case_id={','.join(ids)} {report.head_line} {report.outcome.upper()}')
+        logging.info(f'test_case_id={",".join(ids)} {report.head_line} {report.outcome.upper()}')
+
+
+@pytest.fixture()
+def connect_to_db():
+    """Provide a SQLAlchemy session connected to the test booking database.
+
+    This fixture creates a SQLite engine pointing to the test database file,
+    initializes the database schema using SQLAlchemy metadata, and yields an
+    active session for use in tests. The session is closed automatically
+    after the test finishes.
+
+    Yields:
+        Session: An active SQLAlchemy session bound to the test database.
+    """
+    engine = create_engine(
+        f'sqlite:////{CommonPaths.project_root().joinpath("tests").joinpath("resources")}/booking.db', echo=True
+    )
+    Base.metadata.create_all(engine)
+
+    with Session(engine) as session:
+        yield session
+        session.close()

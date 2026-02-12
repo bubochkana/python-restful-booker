@@ -9,6 +9,9 @@ class BookingTable:
     def __init__(self, session: Session):
         self.session = session
 
+    def booking_table(self):
+        return self
+
     def get_by_id(self, booking_id):
         stmt = select(BookingDBModel).where(BookingDBModel.bookingid == booking_id)
         return self.session.scalar(stmt)

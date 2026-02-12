@@ -113,11 +113,16 @@ def pytest_runtest_makereport(item, call):
 
 @pytest.fixture()
 def connect_to_db():
+    """Provide a database session connected to the booking test database.
+
+    This fixture initializes a SQLAlchemy session using the ``BookingDB``
+    connection factory and yields it for use in tests. The session is
+    automatically closed after the test completes.
+
+    Yields:
+        Session: An active SQLAlchemy session bound to the booking database.
+    """
     session = BookingDB().connect()
     yield session
     session.close()
 
-
-@pytest.fixture()
-def booking_table(connect_to_db):
-    return BookingTable(connect_to_db)

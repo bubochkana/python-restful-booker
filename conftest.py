@@ -11,7 +11,6 @@ import yaml
 from src.common.common_paths import CommonPaths
 from src.common.logging_manager import LoggingManager
 from src.db.booking.booking_db import BookingDB
-from src.db.booking.booking_table import BookingTable
 from src.utils.env_loader import EnvLoader
 
 
@@ -125,4 +124,3 @@ def connect_to_db():
     session = BookingDB().connect()
     yield session
     session.close()
-

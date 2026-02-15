@@ -111,7 +111,7 @@ def pytest_runtest_makereport(item, call):
 
 
 @pytest.fixture()
-def connect_to_db():
+def connect_to_db_sql_alchemy():
     """Provide a database session connected to the booking test database.
 
     This fixture initializes a SQLAlchemy session using the ``BookingDB``
@@ -121,6 +121,24 @@ def connect_to_db():
     Yields:
         Session: An active SQLAlchemy session bound to the booking database.
     """
-    session = BookingDB().connect()
+    session = BookingDB().connect_sql_alchemy()
     yield session
     session.close()
+
+
+@pytest.fixture()
+def connect_to_db_cursor():
+    """Provide a database cursor connected to the booking test database.
+
+    This fixture creates a SQLite database connection using the
+    ``BookingDB.connect_cursor`` method, retrieves a cursor from
+    the connection, and yields it for use in tests. The database
+    connection is automatically closed after the test completes.
+
+    Yields:
+        sqlite3.Cursor: Active SQLite cursor for executing SQL queries.
+    """
+    connection = BookingDB().connect_cursor()
+    cursor = connection.cursor()
+    yield cursor
+    connection.close()

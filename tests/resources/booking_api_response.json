@@ -1,4 +1,5 @@
-{
+[
+    {
     "firstname": "Gabriella",
     "lastname": "Soliz",
     "totalprice": 300,
@@ -8,4 +9,16 @@
         "checkout": "2024-12-07"
     },
     "additionalneeds": "A bed for a child"
+},
+{
+    "firstname": "Gabriella",
+    "lastname": "Dewis",
+    "totalprice": 300,
+    "depositpaid": true,
+    "bookingdates": {
+        "checkin": "2024-11-25",
+        "checkout": "2024-12-07"
+    },
+    "additionalneeds": "A bed for a child"
 }
+]

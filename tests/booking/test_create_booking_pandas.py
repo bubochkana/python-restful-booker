@@ -1,6 +1,8 @@
 import json
 from pathlib import Path
 
+import pandas as pd
+
 from src.actions.booking_actions import BookingActions
 from src.common.common_paths import CommonPaths
 
@@ -15,7 +17,7 @@ class TestCreateBookingDB:
 
         data = json.loads(Path(
             CommonPaths.project_root().joinpath("tests").joinpath("resources")
-            .joinpath("booking_api_response.json")).read_text())
+            .joinpath("booking_api_response.json")).read_text())[0]
         expected_booking_api_response = BookingModel.model_validate(data)
 
         actual_result_as_df = booking_table.as_data_frame()
@@ -31,4 +33,23 @@ class TestCreateBookingDB:
             additionalneeds=row.additionalneeds)
 
         BookingActions().assert_comparison_results(expected_booking_api_response, actual_result_from_df)
+
+    def test_merge_same_bookings(self):
+        data = json.loads(Path(CommonPaths.project_root().joinpath("tests").joinpath("resources").joinpath("booking_api_response.json")).read_text())
+        df_booking1 = pd.DataFrame(data[0])
+        df_booking2 = pd.DataFrame(data[0])
+
+        merged_bookings = df_booking1.merge(df_booking2, indicator=True, how='outer')
+        booking_merge_diff = merged_bookings.loc[lambda x: x['_merge'] != 'both']
+        print(booking_merge_diff)
+
+    def test_merge_different_bookings(self):
+        data = json.loads(Path(CommonPaths.project_root().joinpath("tests").joinpath("resources").joinpath("booking_api_response.json")).read_text())
+        df_booking1 = pd.DataFrame(data[0])
+        df_booking2 = pd.DataFrame(data[1])
+
+        merged_bookings = df_booking1.merge(df_booking2, indicator=True, how='outer')
+        booking_merge_diff = merged_bookings.loc[lambda x: x['_merge'] != 'both']
+        print(booking_merge_diff)
+
 

@@ -14,7 +14,7 @@ class TestCreateBookingDB:
 
         data = json.loads(Path(
             CommonPaths.project_root().joinpath("tests").joinpath("resources")
-            .joinpath("booking_api_response.json")).read_text())
+            .joinpath("booking_api_response.json")).read_text())[0]
         expected_booking_api_response = BookingModel.model_validate(data)
 
         actual_result_as_booking_db_model = booking_table.get_by_id(existing_in_db_booking_id)
@@ -35,7 +35,7 @@ class TestCreateBookingDB:
 
         data = json.loads(Path(
             CommonPaths.project_root().joinpath("tests").joinpath("resources")
-            .joinpath("booking_api_response.json")).read_text())
+            .joinpath("booking_api_response.json")).read_text())[0]
         expected_booking_api_response = BookingModel.model_validate(data)
 
         actual_db_result_db_model = connect_to_db_cursor.execute(f'SELECT * FROM booking WHERE bookingid={existing_in_db_booking_id}')

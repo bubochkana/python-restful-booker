@@ -4,14 +4,15 @@ This module provides a database query interface for interacting with
 the booking table using SQLAlchemy ORM and optional pandas integration.
 """
 
-from sqlalchemy import select
+from typing import Optional
+
 from sqlalchemy.orm import Session
 
 from src.db.abstract_table import AbstractTable
 from src.db.booking.db_models.booking_db_model import BookingDBModel
 
 
-class BookingTable(AbstractTable):
+class BookingTable(AbstractTable[BookingDBModel]):
     """Query interface for booking-related database operations.
 
     Extends:
@@ -40,15 +41,14 @@ class BookingTable(AbstractTable):
         """
         return self
 
-    def get_by_id(self, booking_id):
+    def get_by_id(self, booking_id: int) -> Optional[BookingDBModel]:
         """Retrieve a booking record by its unique identifier.
 
         Args:
-            booking_id: Identifier of the booking to retrieve.
+            booking_id (int): Identifier of the booking to retrieve.
 
         Returns:
-            BookingDBModel | None: The matching booking entity if found,
+            Optional[BookingDBModel]: Matching booking ORM object if found,
             otherwise ``None``.
         """
-        stmt = select(BookingDBModel).where(BookingDBModel.bookingid == booking_id)
-        return self.session.scalar(stmt)
+        return super().get_by(BookingDBModel.bookingid == booking_id)

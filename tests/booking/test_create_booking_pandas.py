@@ -48,8 +48,8 @@ class TestCreateBookingDB:
         df_booking1 = pd.DataFrame(data[0])
         df_booking2 = pd.DataFrame(data[1])
 
-        merged_bookings = df_booking1.merge(df_booking2, indicator=True, how='outer')
-        booking_merge_diff = merged_bookings.loc[lambda x: x['_merge'] != 'both']
+        merged_bookings = df_booking1.merge(df_booking2, indicator=True, how='outer', on="lastname", suffixes=("_dfb1", "_dfb2"))
+        booking_merge_diff = merged_bookings.loc[lambda x: x['_merge'] == 'both']
         print(booking_merge_diff)
 
 

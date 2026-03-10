@@ -44,12 +44,15 @@ class TestCreateBookingDB:
         print(booking_merge_diff)
 
     def test_merge_different_bookings(self):
-        data = json.loads(Path(CommonPaths.project_root().joinpath("tests").joinpath("resources").joinpath("booking_api_response.json")).read_text())
-        df_booking1 = pd.DataFrame(data[0])
-        df_booking2 = pd.DataFrame(data[1])
+        data = json.loads(Path(CommonPaths.project_root().joinpath("tests").joinpath("resources").joinpath("booking_api_response_no_dates.json")).read_text())
+        df_booking1 = pd.DataFrame([data[0]])
+        df_booking2 = pd.DataFrame([data[1]])
 
-        merged_bookings = df_booking1.merge(df_booking2, indicator=True, how='outer', on="lastname", suffixes=("_dfb1", "_dfb2"))
-        booking_merge_diff = merged_bookings.loc[lambda x: x['_merge'] == 'both']
-        print(booking_merge_diff)
+        # merged_bookings = df_booking1.merge(df_booking2, indicator=True, how='outer', on="lastname", suffixes=("_dfb1", "_dfb2"))
+        # booking_merge_diff = merged_bookings.loc[lambda x: x['_merge'] != 'both']
+        # print(booking_merge_diff)
+
+        booking_diff = pd.concat([df_booking1,df_booking2]).drop_duplicates(keep=False)
+        print(booking_diff)
 
 

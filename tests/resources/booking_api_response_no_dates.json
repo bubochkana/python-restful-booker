@@ -1,0 +1,16 @@
+[
+    {
+    "firstname": "Gabriella",
+    "lastname": "Soliz",
+    "totalprice": 300,
+    "depositpaid": true,
+    "additionalneeds": "A bed for a child"
+},
+{
+    "firstname": "Gabriella",
+    "lastname": "Dewis",
+    "totalprice": 300,
+    "depositpaid": true,
+    "additionalneeds": "A bed for a child"
+}
+]

@@ -7,12 +7,10 @@ test execution.
 
 import pytest
 import yaml
-from sqlalchemy import create_engine
-from sqlalchemy.orm import Session
 
 from src.common.common_paths import CommonPaths
 from src.common.logging_manager import LoggingManager
-from src.models.bookings.sql_alchemy_booking_model import Base
+from src.db.booking.booking_db import BookingDB
 from src.utils.env_loader import EnvLoader
 
 
@@ -113,22 +111,34 @@ def pytest_runtest_makereport(item, call):
 
 
 @pytest.fixture()
-def connect_to_db():
-    """Provide a SQLAlchemy session connected to the test booking database.
+def connect_to_db_sql_alchemy():
+    """Provide a database session connected to the booking test database.
 
-    This fixture creates a SQLite engine pointing to the test database file,
-    initializes the database schema using SQLAlchemy metadata, and yields an
-    active session for use in tests. The session is closed automatically
-    after the test finishes.
+    This fixture initializes a SQLAlchemy session using the ``BookingDB``
+    connection factory and yields it for use in tests. The session is
+    automatically closed after the test completes.
 
     Yields:
-        Session: An active SQLAlchemy session bound to the test database.
+        Session: An active SQLAlchemy session bound to the booking database.
     """
-    engine = create_engine(
-        f'sqlite:////{CommonPaths.project_root().joinpath("tests").joinpath("resources")}/booking.db', echo=True
-    )
-    Base.metadata.create_all(engine)
+    session = BookingDB().connect_sql_alchemy()
+    yield session
+    session.close()
 
-    with Session(engine) as session:
-        yield session
-        session.close()
+
+@pytest.fixture()
+def connect_to_db_cursor():
+    """Provide a database cursor connected to the booking test database.
+
+    This fixture creates a SQLite database connection using the
+    ``BookingDB.connect_cursor`` method, retrieves a cursor from
+    the connection, and yields it for use in tests. The database
+    connection is automatically closed after the test completes.
+
+    Yields:
+        sqlite3.Cursor: Active SQLite cursor for executing SQL queries.
+    """
+    connection = BookingDB().connect_cursor()
+    cursor = connection.cursor()
+    yield cursor
+    connection.close()
